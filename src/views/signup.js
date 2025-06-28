@@ -12,7 +12,7 @@ newUserdiv.innerHTML =`
     <input type="email" id="registerFormEmail" placeholder="Email" required>
     <input type="password" id="registerFormPassword" placeholder="Password" required>
     <input type="text" id="registerFormCountry" placeholder="Country">
-    <button type="submit">Enviar</button>
+    <button type="submit">Sign up</button>
 </form>`
 
 const formNewuser = document.getElementById("divNewUserForm")
