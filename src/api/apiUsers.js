@@ -1,5 +1,21 @@
 const baseUrl = "https://685ed4157b57aebd2afab60a.mockapi.io/modulo4";
 
+
+export async function getUsers() {
+    const url = `${baseUrl}/users`;
+    try {
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error("Error en la petición getUsers")
+        }
+        const users = await response.json();
+        console.log(users); 
+        userList(users);
+        return users;
+    } catch (error) {
+        console.error("Error")
+    }
+
 export async function createNewUser(user) {
   const url = `${baseUrl}/users`;
 
@@ -22,5 +38,5 @@ export async function createNewUser(user) {
   } catch (error) {
     console.error(error);
   }
-}
 
+}
