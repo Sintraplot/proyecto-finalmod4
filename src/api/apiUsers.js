@@ -1,14 +1,14 @@
 const baseUrl = "https://685ed4157b57aebd2afab60a.mockapi.io/modulo4";
 
 
-async function getUsers() {
+export async function getUsers() {
     const url = `${baseUrl}/users`;
     try {
         const response = await fetch(url);
         if (!response.ok) {
             throw new Error("Error en la petición getUsers")
         }
-        const allUsers = await response.json();
+        const users = await response.json();
         console.log(users); 
         userList(users);
         return users;
