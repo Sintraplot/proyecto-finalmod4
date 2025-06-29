@@ -1,14 +1,32 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite App</title>
+    <link rel="stylesheet" href="./src/styles/reset.css" />
+    <link rel="stylesheet" href="./src/styles/main.css" />
+    <title>MovieTime</title>
   </head>
   <body>
-    <div id="app"></div>
+    <header>
+      <div class="navbar">
+        <nav>
+          <a href="/" data-link>Home</a>
+          <a href="/login" data-link>Login</a>
+          <a href="/signup" data-link>Sign up</a>
+          <a href="/profile/123" data-link>My Profile</a>
+          <a href="">Logout</a>
+        </nav>
+      </div>
+    </header>
+    <main id="app"></main>
+    <footer>
+      <p>HerTech - Proyecto final módulo 4</p>
+      <p>Alejandra, Carol, Sintra y Tracy</p>
+    </footer>
     <script type="module" src="/src/main.js"></script>
-    <script type="module" src="./src/views/signup.js"></script>
+    <!-- <script type="module" src="./src/views/signup.js"></script> -->
+    <script type="module" src="./src/router.js"></script>
   </body>
 </html>

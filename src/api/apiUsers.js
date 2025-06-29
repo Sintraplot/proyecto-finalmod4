@@ -1,5 +1,7 @@
 const baseUrl = "https://685ed4157b57aebd2afab60a.mockapi.io/modulo4";
 
+//User Signup
+
 export async function createNewUser(user) {
   const url = `${baseUrl}/users`;
 
@@ -24,3 +26,18 @@ export async function createNewUser(user) {
   }
 }
 
+//------------------------
+
+//User Login
+
+// Actualizar la navbar con el nuevo estado
+// renderNavbar(userData);
+// Navegar a home
+// navigate("/home");
+
+//------------------------
+
+export function getCurrentUser() {
+  const storedUser = localStorage.getItem("user");
+  return storedUser ? JSON.parse(storedUser) : null;
+}
