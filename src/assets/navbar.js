@@ -15,5 +15,3 @@ export function renderNavbar(user) {
     `;
   }
 }
-
-// Llama renderNavbar(usuarioActual) en carga y tras login/logout

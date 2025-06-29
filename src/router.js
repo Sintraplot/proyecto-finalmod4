@@ -11,12 +11,12 @@ const routes = {
   "/login": Login,
   "/signup": Signup,
   "/user/:id": Profile,
-  "/movies/:id": MovieDetail,
+  "/movie/:id": MovieDetail,
 };
 
 //------------------------
 
-const publicPaths = ["/login", "/signup"];
+const publicPaths = ["/login", "/signup"]; // páginas publicas con acceso sin estar logeado
 
 export function router() {
   const path = window.location.pathname;
@@ -26,10 +26,15 @@ export function router() {
   container.innerHTML = "";
 
   // Protecciones y redirecciones
+
+  //Si usuario no está logeado y quiere ir a rutas privadas entonces:
+
   if (!currentUser && !publicPaths.includes(path)) {
     navigate("/login");
     return;
   }
+
+  //Si usuario está logeado y quiere ir a signup or login (no tiene sentido) entonces:
 
   if (currentUser && publicPaths.includes(path)) {
     navigate("/");
