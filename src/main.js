@@ -1,4 +1,4 @@
-import { renderNavbar } from "./assets/navbar.js";
+import { renderNavbar } from "./utils/navbar.js";
 import { router, handleLinks } from "./router.js";
 import { getCurrentUser } from "./api/apiUsers.js";
 
