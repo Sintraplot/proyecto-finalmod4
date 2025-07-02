@@ -9,3 +9,9 @@ document.addEventListener("DOMContentLoaded", () => {
   router();
 });
 //Este evento hace que espere a que todo el contenido del DOM se cargue antes de mostrar y redirigir
+
+export async function getUsers() {    
+    return allUsers;    
+}
+
+import { getUsers } from "./api/apiUsers.js";  
