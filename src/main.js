@@ -1,6 +1,7 @@
 import { renderNavbar } from "./utils/navbar.js";
 import { router, handleLinks } from "./router.js";
 import { getCurrentUser } from "./api/apiUsers.js";
+import { editUser } from "./api/apiUsers.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   renderNavbar(getCurrentUser());
