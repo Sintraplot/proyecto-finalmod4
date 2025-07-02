@@ -30,15 +30,15 @@ export function Signup(container) {
       .value.trim();
     const signupIsland = document.getElementById("registerFormIsland").value.trim();
 
-    const validations = dataValidations({name: signupName, email: signupEmail, password: signupPassword}); //incluir repeatpassword
+    const validations = dataValidations({name: signupName, email: signupEmail, password: signupPassword}); //incluir repeatpassword});
     
     if(validations) {
       const userData = {
-      name,
-      email,
-      password }; //incluir repeatPassword
+      name: signupName,
+      email: signupEmail,
+      password: signupPassword }; //incluir repeatPassword
 };
        await createNewUser(userData);
 }
-})
+});
 
