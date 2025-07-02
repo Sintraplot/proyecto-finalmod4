@@ -18,7 +18,7 @@ export function Signup(container) {
 
   const formNewUser = document.getElementById("divNewUserForm");
 
-  formNewUser.addEventListener("submit", function (event) {
+  formNewUser.addEventListener("submit", async (event) => {
     event.preventDefault();
     const signupName = document.getElementById("registerFormName").value.trim();
     const signupEmail = document.getElementById("registerFormEmail").value.trim();
@@ -34,11 +34,11 @@ export function Signup(container) {
     
     if(validations) {
       const userData = {
-      name: signupName,
-      email: signupEmail,
-      password: signupPassword }; //incluir repeatPassword
-};
-       await createNewUser(userData);
+      signupName,
+      signupEmail,
+      signupPassword }; //incluir repeatPassword
+
+      await createNewUser(userData);
 }
 });
-
+}
