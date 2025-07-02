@@ -1,4 +1,5 @@
 import { createNewUser } from "../api/apiUsers.js";
+import { dataValidations } from "../utils/validations";
 
 export function Signup(container) {
   const newUserdiv = document.createElement("div");
@@ -10,7 +11,8 @@ export function Signup(container) {
     <input type="text" id="registerFormName" placeholder="Name" required>
     <input type="email" id="registerFormEmail" placeholder="Email" required>
     <input type="password" id="registerFormPassword" placeholder="Password" required>
-    <input type="text" id="registerFormCountry" placeholder="Country">
+    <input type="password" id="registerFormRepPassword" placeholder="Repeat password" required>
+    <input type="text" id="registerFormIsland" placeholder="Island">
     <button type="submit">Sign up</button>
     </form>`;
 
@@ -18,18 +20,25 @@ export function Signup(container) {
 
   formNewUser.addEventListener("submit", function (event) {
     event.preventDefault();
-    const name = document.getElementById("registerFormName").value.trim();
-    const email = document.getElementById("registerFormEmail").value.trim();
-    const password = document
+    const signupName = document.getElementById("registerFormName").value.trim();
+    const signupEmail = document.getElementById("registerFormEmail").value.trim();
+    const signupPassword = document
       .getElementById("registerFormPassword")
       .value.trim();
-    const country = document.getElementById("registerFormCountry").value.trim();
+    const signupRepPassword = document
+      .getElementById("registerFormRepPassword")
+      .value.trim();
+    const signupIsland = document.getElementById("registerFormIsland").value.trim();
 
-    createNewUser({
+    const validations = dataValidations({name: signupName, email: signupEmail, password: signupPassword}); //incluir repeatpassword
+    
+    if(validations) {
+      const userData = {
       name,
       email,
-      password,
-      country,
-    });
-  });
+      password }; //incluir repeatPassword
+};
+       await createNewUser(userData);
 }
+})
+
