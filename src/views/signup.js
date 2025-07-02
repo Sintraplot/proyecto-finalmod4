@@ -1,35 +1,35 @@
-import { createNewUser } from "../api/apiUsers";
+import { createNewUser } from "../api/apiUsers.js";
 
-
-const container = document.getElementById ("app");
-const newUserdiv = document.createElement ("div");
-newUserdiv.classList.add ("divNewUser");
-container.appendChild(newUserdiv);
-newUserdiv.innerHTML =`
-<form id = "divNewUserForm">
+export function Signup(container) {
+  const newUserdiv = document.createElement("div");
+  newUserdiv.classList.add("divNewUser");
+  container.appendChild(newUserdiv);
+  newUserdiv.innerHTML = `
+    <form id = "divNewUserForm">
     <h2 id="registerFormH2">Register form</h2>
     <input type="text" id="registerFormName" placeholder="Name" required>
     <input type="email" id="registerFormEmail" placeholder="Email" required>
     <input type="password" id="registerFormPassword" placeholder="Password" required>
     <input type="text" id="registerFormCountry" placeholder="Country">
     <button type="submit">Sign up</button>
-</form>`
+    </form>`;
 
-const formNewuser = document.getElementById("divNewUserForm")
+  const formNewUser = document.getElementById("divNewUserForm");
 
-formNewuser.addEventListener ("submit", function (event){
+  formNewUser.addEventListener("submit", function (event) {
     event.preventDefault();
     const name = document.getElementById("registerFormName").value.trim();
     const email = document.getElementById("registerFormEmail").value.trim();
-    const password = document.getElementById("registerFormPassword").value.trim();
+    const password = document
+      .getElementById("registerFormPassword")
+      .value.trim();
     const country = document.getElementById("registerFormCountry").value.trim();
 
     createNewUser({
-        name,
-        email,
-        password,
-        country
-    })
-
-})
-
+      name,
+      email,
+      password,
+      country,
+    });
+  });
+}
