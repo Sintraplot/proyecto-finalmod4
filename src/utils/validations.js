@@ -1,4 +1,4 @@
-export function dataValidations({name, email, password}) {
+export function dataValidations({name, email, password, /*repPassword*/}) {
 
     if(name !== undefined) {
         if(name.length < 2 || !name) {
@@ -28,7 +28,7 @@ export function dataValidations({name, email, password}) {
         }
     };
 
-    //Incluir repeatpassword
+    //Verificar que repPassword debe ser igual a password
 
     return true;
 };
