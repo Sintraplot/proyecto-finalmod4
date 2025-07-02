@@ -6,7 +6,8 @@ export async function getAllMovies() {
 
     try {
         const response = await fetch(url);
-
+        console.log(response);
+        
         if(!response.ok) {
             throw new Error("Error bringing list of films");
         }
