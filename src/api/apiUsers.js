@@ -5,20 +5,15 @@ const baseUrl = "https://685ed4157b57aebd2afab60a.mockapi.io/modulo4";
 export async function createNewUser(user) {
   const url = `${baseUrl}/users`;
 
-  
-
-export async function createNewUser(user) {
-  const url = `${baseUrl}/users`;
-
   try {
     const response = await fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        name: user.name,
-        email: user.email,
-        password: user.password,
-        country: user.country,
+        name: user.signupName,
+        email: user.signupEmail,
+        password: user.signupPassword,
+        island: user.signupIsland,
       }),
     });
     if (!response.ok) {
@@ -33,20 +28,20 @@ export async function createNewUser(user) {
 
 // get User
 
-async function getUsers() {
-    const url = `${baseUrl}/users`;
-    try {
-        const response = await fetch(url);
-        if (!response.ok) {
-            throw new Error("Error en la petición getAllUsers")
-        }
-        const users = await response.json();
-        console.log(users); 
-        listarUsuarios(users)
-        // return allUsers;
-    } catch (error) {
-        console.error("Error")
+export async function getUsers() {
+  const url = `${baseUrl}/users`;
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error("Error en la petición getAllUsers");
     }
+    const users = await response.json();
+    console.log(users);
+    listarUsuarios(users);
+    // return allUsers;
+  } catch (error) {
+    console.error("Error");
+  }
 }
 
 //------------------------
@@ -65,7 +60,6 @@ export function getCurrentUser() {
   return storedUser ? JSON.parse(storedUser) : null;
 }
 
-
 //Edit user
 
 export async function editUser(id, userData) {
@@ -74,7 +68,7 @@ export async function editUser(id, userData) {
     const response = await fetch(url, {
       method: "PUT",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         name: userData.name,
@@ -83,19 +77,17 @@ export async function editUser(id, userData) {
         // repeatPassword: userData.repeatPassword  Tener en cuenta nombre desde MOCKAPI
         // island: userData.island,
         // favourites: userData.favourites
-      })
+      }),
     });
 
-    if(!response.ok) {
+    if (!response.ok) {
       throw new Error("Error editing user");
-    };
+    }
 
     const updatedUser = await response.json();
 
     console.log(updatedUser, "User updated");
-
   } catch (error) {
     console.error(error);
   }
-};
-
+}

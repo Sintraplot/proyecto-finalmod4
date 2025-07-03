@@ -1,10 +1,9 @@
-const navbar = document.querySelector("nav");
-
 export function renderNavbar(user) {
+  const navbar = document.querySelector("nav");
   if (user) {
     navbar.innerHTML = `
       <a href="/" data-link>Home</a>
-      <a href="/profile/${user.id}" data-link>Profile</a>
+      <a href="/user/${user.id}" data-link>Profile</a>
       <a href="" id="logout" >Logout</a>
     `;
   } else {

@@ -2,6 +2,7 @@ import { renderNavbar } from "./utils/navbar.js";
 import { router, handleLinks } from "./router.js";
 import { getCurrentUser } from "./api/apiUsers.js";
 import { editUser } from "./api/apiUsers.js";
+import { getUsers } from "./api/apiUsers.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   renderNavbar(getCurrentUser());
@@ -9,9 +10,3 @@ document.addEventListener("DOMContentLoaded", () => {
   router();
 });
 //Este evento hace que espere a que todo el contenido del DOM se cargue antes de mostrar y redirigir
-
-export async function getUsers() {    
-    return allUsers;    
-}
-
-import { getUsers } from "./api/apiUsers.js";  
