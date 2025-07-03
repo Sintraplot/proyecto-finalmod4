@@ -34,19 +34,15 @@ export function Signup(container) {
       .getElementById("registerFormIsland")
       .value.trim();
 
-    const validations = dataValidations({
-      name: signupName,
-      email: signupEmail,
-      password: signupPassword,
-    }); //incluir repeatpassword});
-
-    if (validations) {
+    const validations = dataValidations({name: signupName, email: signupEmail, password: signupPassword, repeatPassword: signupRepPassword, island: signupIsland});
+    
+    if(validations) {
       const userData = {
-        signupName,
-        signupEmail,
-        signupPassword,
-        signupIsland,
-      }; //incluir repeatPassword
+      signupName,
+      signupEmail,
+      signupPassword,
+      signupRepPassword,
+      signupIsland};
 
       await createNewUser(userData);
       //añadir redirección

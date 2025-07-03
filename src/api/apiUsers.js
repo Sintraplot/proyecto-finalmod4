@@ -26,24 +26,6 @@ export async function createNewUser(user) {
   }
 }
 
-// get User
-
-export async function getUsers() {
-  const url = `${baseUrl}/users`;
-  try {
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error("Error en la petición getAllUsers");
-    }
-    const users = await response.json();
-    console.log(users);
-    listarUsuarios(users);
-    // return allUsers;
-  } catch (error) {
-    console.error("Error");
-  }
-}
-
 //------------------------
 
 //User Login
@@ -53,10 +35,28 @@ export async function getUsers() {
 // Navegar a home
 // navigate("/home");
 
+
+// get User
+
+export async function getUsers() {
+    const url = `${baseUrl}/users`;
+    try {
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error("Error in getAllUsers request")
+        }
+        const users = await response.json();
+        console.log(users); 
+        listarUsuarios(users)
+        // return allUsers;
+    } catch (error) {
+        console.error("Error")
+    }
+
 //------------------------
 
 export function getCurrentUser() {
-  const storedUser = localStorage.getItem("user");
+  const storedUser = localStorage.getItem("current-user");
   return storedUser ? JSON.parse(storedUser) : null;
 }
 
@@ -74,10 +74,8 @@ export async function editUser(id, userData) {
         name: userData.name,
         email: userData.email,
         password: userData.password,
-        // repeatPassword: userData.repeatPassword  Tener en cuenta nombre desde MOCKAPI
-        // island: userData.island,
-        // favourites: userData.favourites
-      }),
+        island: userData.island,
+      })
     });
 
     if (!response.ok) {
