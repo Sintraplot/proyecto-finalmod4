@@ -21,24 +21,35 @@ export function Signup(container) {
   formNewUser.addEventListener("submit", async (event) => {
     event.preventDefault();
     const signupName = document.getElementById("registerFormName").value.trim();
-    const signupEmail = document.getElementById("registerFormEmail").value.trim();
+    const signupEmail = document
+      .getElementById("registerFormEmail")
+      .value.trim();
     const signupPassword = document
       .getElementById("registerFormPassword")
       .value.trim();
     const signupRepPassword = document
       .getElementById("registerFormRepPassword")
       .value.trim();
-    const signupIsland = document.getElementById("registerFormIsland").value.trim();
+    const signupIsland = document
+      .getElementById("registerFormIsland")
+      .value.trim();
 
-    const validations = dataValidations({name: signupName, email: signupEmail, password: signupPassword}); //incluir repeatpassword});
-    
-    if(validations) {
+    const validations = dataValidations({
+      name: signupName,
+      email: signupEmail,
+      password: signupPassword,
+    }); //incluir repeatpassword});
+
+    if (validations) {
       const userData = {
-      signupName,
-      signupEmail,
-      signupPassword }; //incluir repeatPassword
+        signupName,
+        signupEmail,
+        signupPassword,
+        signupIsland,
+      }; //incluir repeatPassword
 
       await createNewUser(userData);
-}
-});
+      //añadir redirección
+    }
+  });
 }
