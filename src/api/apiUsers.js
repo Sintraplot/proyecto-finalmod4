@@ -1,4 +1,4 @@
-const baseUrl = "https://685ed4157b57aebd2afab60a.mockapi.io/modulo4";
+const baseUrl = "https://685ed4157b7aebd2afab60a.mockapi.io/modulo4";
 
 //User Signup
 
@@ -52,6 +52,7 @@ export async function getUsers() {
     } catch (error) {
         console.error("Error")
     }
+}
 
 //------------------------
 
