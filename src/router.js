@@ -16,7 +16,7 @@ const routes = {
 
 //------------------------
 
-const publicPaths = ["/login", "/signup"]; // páginas publicas con acceso sin estar logeado
+const publicPaths = ["/login", "/signup", "/", "/user/:id"]; // páginas publicas con acceso sin estar logeado
 
 export function router() {
   const path = window.location.pathname;
@@ -54,8 +54,8 @@ export function router() {
     return;
   }
 
-  // Rutas dinámicas /profile/:id
-  if (path.startsWith("/profile/")) {
+  // Rutas dinámicas /user/:id
+  if (path.startsWith("/user/")) {
     const userId = path.split("/")[2];
     Profile(container, userId);
     return;

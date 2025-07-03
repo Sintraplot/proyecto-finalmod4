@@ -1,7 +1,7 @@
 const baseUrl = "https://685ed4157b57aebd2afab60a.mockapi.io/modulo4";
 
 //User Signup
-  
+
 export async function createNewUser(user) {
   const url = `${baseUrl}/users`;
 
@@ -10,10 +10,10 @@ export async function createNewUser(user) {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        name: user.name,
-        email: user.email,
-        password: user.password,
-        country: user.country,
+        name: user.signupName,
+        email: user.signupEmail,
+        password: user.signupPassword,
+        island: user.signupIsland,
       }),
     });
     if (!response.ok) {
@@ -52,7 +52,6 @@ export async function getUsers() {
     } catch (error) {
         console.error("Error")
     }
-}
 
 //------------------------
 
@@ -60,7 +59,6 @@ export function getCurrentUser() {
   const storedUser = localStorage.getItem("current-user");
   return storedUser ? JSON.parse(storedUser) : null;
 }
-
 
 //Edit user
 
@@ -70,7 +68,7 @@ export async function editUser(id, userData) {
     const response = await fetch(url, {
       method: "PUT",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         name: userData.name,
@@ -80,16 +78,14 @@ export async function editUser(id, userData) {
       })
     });
 
-    if(!response.ok) {
+    if (!response.ok) {
       throw new Error("Error editing user");
-    };
+    }
 
     const updatedUser = await response.json();
 
     console.log(updatedUser, "User updated");
-
   } catch (error) {
     console.error(error);
   }
-};
-
+}
