@@ -1,12 +1,7 @@
 const baseUrl = "https://685ed4157b57aebd2afab60a.mockapi.io/modulo4";
 
 //User Signup
-
-export async function createNewUser(user) {
-  const url = `${baseUrl}/users`;
-
   
-
 export async function createNewUser(user) {
   const url = `${baseUrl}/users`;
 
@@ -31,14 +26,24 @@ export async function createNewUser(user) {
   }
 }
 
+//------------------------
+
+//User Login
+
+// Actualizar la navbar con el nuevo estado
+// renderNavbar(userData);
+// Navegar a home
+// navigate("/home");
+
+
 // get User
 
-async function getUsers() {
+export async function getUsers() {
     const url = `${baseUrl}/users`;
     try {
         const response = await fetch(url);
         if (!response.ok) {
-            throw new Error("Error en la petición getAllUsers")
+            throw new Error("Error in getAllUsers request")
         }
         const users = await response.json();
         console.log(users); 
@@ -51,17 +56,8 @@ async function getUsers() {
 
 //------------------------
 
-//User Login
-
-// Actualizar la navbar con el nuevo estado
-// renderNavbar(userData);
-// Navegar a home
-// navigate("/home");
-
-//------------------------
-
 export function getCurrentUser() {
-  const storedUser = localStorage.getItem("user");
+  const storedUser = localStorage.getItem("current-user");
   return storedUser ? JSON.parse(storedUser) : null;
 }
 
@@ -80,9 +76,7 @@ export async function editUser(id, userData) {
         name: userData.name,
         email: userData.email,
         password: userData.password,
-        // repeatPassword: userData.repeatPassword  Tener en cuenta nombre desde MOCKAPI
-        // island: userData.island,
-        // favourites: userData.favourites
+        island: userData.island,
       })
     });
 

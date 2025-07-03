@@ -1,4 +1,4 @@
-export function dataValidations({name, email, password, /*repPassword*/}) {
+export function dataValidations({name, email, password, repeatPassword}) {
 
     if(name !== undefined) {
         if(name.length < 2 || !name) {
@@ -18,7 +18,7 @@ export function dataValidations({name, email, password, /*repPassword*/}) {
         }
     };
 
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])([A-Za-z\d$@$!%*?&]|[^ ]){8,15}$/;
+    const regexPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])([A-Za-z\d$@$!%*?&]|[^ ]){8,15}$/;
 
     if(password !== undefined) {
         if(!regexPassword.text(password)) {
@@ -28,7 +28,11 @@ export function dataValidations({name, email, password, /*repPassword*/}) {
         }
     };
 
-    //Verificar que repPassword debe ser igual a password
+    if(repeatPassword !== password) {
+        alert("Repeat password must be the same as password")
+        //showToast
+        return false;
+    };
 
     return true;
 };
