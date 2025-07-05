@@ -5,7 +5,8 @@ import { editUser } from "./api/apiUsers.js";
 import { getUsers } from "./api/apiUsers.js";
 
 document.addEventListener("DOMContentLoaded", () => {
-  renderNavbar(getCurrentUser());
+  const currentUser = getCurrentUser();
+  renderNavbar(currentUser);
   handleLinks();
   router();
 });
