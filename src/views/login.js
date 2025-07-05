@@ -1,6 +1,8 @@
+import { getUsers } from "../api/apiUsers";
+import { navigate} from "../router";
 export function Login(container) {
   container.innerHTML = `
-    <div class="login-container">
+    <form class="login-container" id= "login-form">
             <h2>Login</h2>
             <div class="form-group">
                 <label for="loginEmail">Email:</label>
@@ -13,49 +15,57 @@ export function Login(container) {
                 <div id="loginPasswordError" class="error"></div>
             </div>
             <button type="submit">Login</button>
-        </div>
-    `; //Da error, cambiar <div class="login-container"> por un <form> con un id y luego hacer un evento del formulario------------------------------------
+        </form>
+    `; 
 
-  // Función para validar el login
-  function validateLogin() {
-    const loginEmail = document.getElementById("loginEmail").value.trim();
-    const loginPassword = document.getElementById("loginPassword").value.trim();
-    const loginEmailError = document.getElementById("loginEmailError");
-    const loginPasswordError = document.getElementById("loginPasswordError");
+  const loginForm = document.getElementById("login-form");
 
-    // Resetear mensajes de error
-    loginEmailError.style.display = "none";
-    loginPasswordError.style.display = "none";
+  loginForm.addEventListener('submit', async function (event) {
+      event.preventDefault();
 
-    //METER VALIDACIONES EN VALIDATIONS.JS--------------------
-    // Validaciones
-    let isValid = true;
+      const loginEmail = document.getElementById("loginEmail").value.trim();
+      const loginPassword = document.getElementById("loginPassword").value.trim();
 
-    if (!loginEmail) {
-      loginEmailError.textContent = "User field is required";
-      loginEmailError.style.display = "block";
-      isValid = false;
+    if (!loginEmail || !loginPassword) {
+        document.getElementById("loginEmailError").textContent = !loginEmail ? "El email es requerido" : "";
+        document.getElementById("loginPasswordError").textContent = !loginPassword ? "La contraseña es requerida" :"";
+        return;
     }
 
-    if (!loginPassword) {
-      loginPasswordError.textContent = "El password field is required";
-      loginPasswordError.style.display = "block";
-      isValid = false;
+    try {
+        // Fetch users from the database
+        const users = await getUsers();
+
+        // Asegurarse 
+        if (!Array.isArray(users)) {
+            throw new Error("Datos inválidos recibidos de la API");
+        }
+
+        // Find a user with matching email and password
+        const matchedUser = users.find(user => 
+            user.email === loginEmail && user.password === loginPassword
+        );
+
+        if (matchedUser) {
+            // Store the matched user in localStorage
+            localStorage.setItem("usuario", JSON.stringify(matchedUser));
+            console.log("Login successful! User stored in localStorage:", matchedUser);
+            // Optionally redirect or perform other actions
+            // window.location.href = '/dashboard.html';
+            navigate("/");
+        } else {
+            // Handle invalid credentials
+            document.getElementById("loginEmailError").textContent = "Email o contraseña inválidos";
+            document.getElementById("loginPasswordError").textContent = "Email o contraseña inválidos";
+            document.getElementById("loginPassword").value = "";
+            console.error("No se encontró un usuario coincidente.");
+        }
+    } catch (error) {
+        // Handle errors from getUsers or other issues
+        document.getElementById("loginEmailError").textContent = "An error occurred during login. Try again.";
+        document.getElementById("loginPassword").value = "";
+        console.error("Login error:", error);
     }
-
-    if (!isValid) return;
-
-    // Verificar credenciales contra la base de datos
-    const user = usersDatabase.find(
-      (user) => user.email === loginEmail && user.password === loginPassword
-    );
-
-    if (user) {
-      alert("¡Login successful! Welcome! " + loginEmail);
-      // Aquí puedes redirigir a otra página o realizar otras acciones
-    } else {
-      passwordError.textContent = "Incorrect useremail or password";
-      passwordError.style.display = "block";
-    }
-  }
+  
+  });
 }
