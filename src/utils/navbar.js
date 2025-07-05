@@ -17,6 +17,9 @@ export function renderNavbar(user) {
       // Limpiar localStorage
       localStorage.removeItem("currentUser");
 
+      // Actualizar navbar
+      renderNavbar(null);
+
       // Redirigir al login
       navigate("/login");
     });

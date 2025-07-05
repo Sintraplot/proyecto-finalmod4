@@ -1,6 +1,7 @@
 import { getUsers } from "../api/apiUsers";
 import { navigate } from "../router";
 import { loginValidations } from "../utils/validations";
+import { renderNavbar } from "../utils/navbar.js";
 
 export function Login(container) {
   container.innerHTML = `
@@ -52,6 +53,10 @@ export function Login(container) {
           "Login successful! User stored in localStorage:",
           matchedUser
         );
+
+        // Actualizar navbar
+        renderNavbar(matchedUser);
+
         navigate("/");
       } else {
         // Manejar credenciales inválidas
