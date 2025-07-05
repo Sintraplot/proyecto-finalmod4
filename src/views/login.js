@@ -46,8 +46,8 @@ export function Login(container) {
       );
 
       if (matchedUser) {
-        // Almacenar el usuario que coincide  en localStorage
-        localStorage.setItem("usuario", JSON.stringify(matchedUser));
+        // Almacenar el usuario que coincide en localStorage
+        localStorage.setItem("currentUser", JSON.stringify(matchedUser));
         console.log(
           "Login successful! User stored in localStorage:",
           matchedUser

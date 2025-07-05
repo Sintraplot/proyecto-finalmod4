@@ -5,6 +5,8 @@ import { Profile } from "./views/profile.js";
 import { MovieDetail } from "./views/movieDetail.js";
 import { NotFound } from "./views/notFound.js";
 import { getCurrentUser } from "./api/apiUsers.js";
+import { getUserFavorites } from "./api/apiUsers.js";
+import { onToggleFavorite } from "./utils/favorites.js";
 
 const routes = {
   "/": Home,
@@ -16,7 +18,7 @@ const routes = {
 
 //------------------------
 
-const publicPaths = ["/login", "/signup", "/", "/user/:id"]; // páginas publicas con acceso sin estar logeado
+const publicPaths = ["/login", "/signup"]; // páginas publicas con acceso sin estar logeado
 
 export async function router() {
   const path = window.location.pathname;
@@ -25,25 +27,35 @@ export async function router() {
   const container = document.getElementById("app");
   container.innerHTML = "";
 
-  // Protecciones y redirecciones
+  // Protecciones y redirecciones (añadir luego)
 
-  //Si usuario no está logeado y quiere ir a rutas privadas entonces:
-
-  if (!currentUser && !publicPaths.includes(path)) {
-    navigate("/login");
-    return;
-  }
-
-  //Si usuario está logeado y quiere ir a signup or login (no tiene sentido) entonces:
-
-  if (currentUser && publicPaths.includes(path)) {
-    navigate("/");
-    return;
-  }
+  // //Si usuario no está logeado y quiere ir a rutas privadas
+  // //Si usuario está logeado y quiere ir a signup or login (no tiene sentido)
 
   // Rutas estáticas
-  if (routes[path]) {
-    routes[path](container);
+  if (path === "/") {
+    const currentUser = getCurrentUser();
+    if (!currentUser) {
+      navigate("/login");
+      return;
+    }
+
+    const favoriteIds = await getUserFavorites(currentUser.id);
+    console.log("Loaded favorites from backend:", favoriteIds);
+    Home(container, favoriteIds, (movieId) =>
+      onToggleFavorite(movieId, container)
+    );
+  }
+
+  // Ruta login
+  if (path === "/login") {
+    Login(container);
+    return;
+  }
+
+  // Ruta signup
+  if (path === "/signup") {
+    Signup(container);
     return;
   }
 
