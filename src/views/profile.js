@@ -1,89 +1,163 @@
-// import { getCurrentUser, editUser } from "./api/apiUsers.js";
+import { editUser, getCurrentUser } from "../api/apiUsers";
 
 export function Profile(container, params) {
-  const userId = params.id;
+  const userId = params.id; //user.id de localstorage
   container.innerHTML = `<h1>Perfil del usuario ${userId}</h1>`;
-
-  // userProfile(container);
+  
+  userProfile(container);
 }
 
-// function userProfile(container) {
-// let currentUser = localStorage.getItem("Current user");
-// currentUser = JSON.parse(currentUser);
-
-// const profileContainer = document.createElement("div");
-// profileContainer.id = "profile-container";
-
-// const welcomeMessage = document.createElement("h2");
-// welcomeMessage.textContent = `Welcome ${currentUser.name}, enjoy your films!`;
-
-
-// // Imagen de perfil por defecto o guardada previamente:
-// const profileImage = document.createElement("img");
-// profileImage.alt = "Profile image";
-// profileImage.className = "profile-picture";
-
-// // Revisar localStorage o usar imagen por defecto:
-// const currentUserImage = localStorage.getItem("current-user-image");
-// profileImage.src = currentUserImage || currentUser.imageURL || "/assets/default-profile.jpg";
-
-// // Input para subir imágenes:
-// const newImageInput = document.createElement("input");
-// newImageInput.type = "file";
-// newImage.accept = "image/*";
-// newImageInput.id = "image-upload";
-
-// // Label estilizada (opcional pero recomendado):
-// const uploadLabel = document.createElement("label");
-// uploadLabel.setAttribute("for", "image-upload");
-// uploadLabel.className = "upload-label";
-// uploadLabel.textContent = "Cambiar foto";
-
-// // Evento para manejar subida de imagen:
-// imageUploadInput.addEventListener("change", (event) => {
-//   const file = event.target.files[0];
-
-//   if (file) {
-//     const reader = new FileReader();
-
-//     reader.onload = (e) => {
-//       // Actualiza la imagen inmediatamente:
-//       profileImage.src = e.target.result;
-
-//       // Guarda la imagen seleccionada en localStorage:
-//       localStorage.setItem("current-user-photo", e.target.result);
-//     };
-
-//     reader.readAsDataURL(file);
-//   }
-// });
-
-// // Añadir elementos al DOM:
-// profileContainer.appendChild(profileImage);
-// profileContainer.appendChild(imageUploadInput);
-// profileContainer.appendChild(uploadLabel);
-
-
-// //Editar perfil
-
-// const editButton = document.createElement("button");
-// editButton.textContent = "Edit profile";
-
+function userProfile(container) {
+  const currentUser = getCurrentUser();
   
-// //Cerrar sesión
+  if (!currentUser) {
+    alert("You are not logged in. Please return to login.")
+    return;
+  }
 
-// const logOutButton = document.createElement("button");
-// logOutButton.textContent = "Log out";
+  const profileContainer = document.createElement("div");
 
-// logOutButton.addEventListener("click", () => {
-//   localStorage.removeItem("current-user");
-//   navigate("/login");
-// });
+  const welcomeMessage = document.createElement("h2");
+  welcomeMessage.textContent = `Welcome ${currentUser.name}! Enjoy your films.`;
 
-
-// container.appendChild(profileContainer);
-// profileContainer.appendChild(welcomeMessage);
-// profileContainer.appendChild(editButton)
-// profileContainer.appendChild(logOutButton);
+  // Foto de perfil:
+  const profileImage = document.createElement("img");
+  profileImage.className = "profile-image";
+  profileImage.src = currentUser.imageURL || "/assets/images/icons8-user-64.png";; 
+  profileImage.alt = "Profile image";
   
-// }
+  
+  const imageOptions = [ 
+  "/assets/images/Avatar1.png",
+  "/assets/images/Avatar2.png",
+  "/assets/images/Avatar3.png"
+  ];
+  
+  const imageSelector = document.createElement("div");
+  imageSelector.className = "image-selector";
+  
+  imageOptions.forEach(imageUrl => {
+  const option = document.createElement("img");
+  option.className = "profile-option";
+  option.src = imageUrl;
+  option.alt = "Profile image option";
+  
+  option.addEventListener("click", () => {
+    profileImage.src = imageUrl;
+    currentUser.imageURL = imageUrl;
+    localStorage.setItem("current-user", JSON.stringify(currentUser));
+  });
+
+  imageSelector.appendChild(option);
+});
+
+  const userInfo = document.createElement("div");
+  userInfo.innerHTML = `
+    <p>Nombre: ${currentUser.name}</p>
+    <p>Email: ${currentUser.email}</p>`;
+
+
+  //Editar usuario
+
+  const editButton = document.createElement("button");
+  editButton.textContent = "Edit profile";
+  editButton.className = "edit-profile-button";
+
+  const editForm = document.createElement("form");
+  editForm.classList.add("hidden");
+
+  const editName = document.createElement("input");
+  editName.type = "text";
+  editName.id = "edit-name";
+  editName.value = currentUser.name;
+
+  const editEmail = document.createElement("input");
+  editEmail.type = "email";
+  editEmail.id = "edit-email";
+  editEmail.value = currentUser.email;
+
+  const editPassword = document.createElement("input");
+  editPassword.type = "password";
+  editPassword.id = "edit-password";
+  editPassword.placeholder = "New password";
+
+  const repeatPasswordInput = document.createElement("input");
+  repeatPasswordInput.type = "password";
+  repeatPasswordInput.id = "repeat-password";
+  repeatPasswordInput.placeholder = "Repeat password";
+
+  const editIslandSelect = document.createElement("select");
+  editIslandSelect.id = "edit-island";
+  const editIslands = [
+    "Tenerife", "La Palma", "La Gomera", "El Hierro", "Gran Canaria", "Fuerteventura", "Lanzarote", "La Graciosa"
+  ];
+
+  editIslands.forEach(editIsland => {
+    const option = document.createElement("option");
+    option.value = editIsland;
+    option.textContent = editIsland;
+    if (editIsland === currentUser.island) {
+      option.selected = true;
+    }
+    editIslandSelect.appendChild(option);
+  });
+
+  //Guardar cambios
+
+  const saveButton = document.createElement("button");
+  saveButton.textContent = "Update profile";
+  saveButton.type = "submit";
+
+  editButton.addEventListener("click", () => {
+    editForm.classList.toggle("hidden");
+  });
+  
+  editForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    
+  //   if (passwordInput.value !== repeatPasswordInput.value) {
+  //     alert("Repeat password must be the same password");
+  //   return;
+  // }
+  
+  const updatedUser = {
+    name: editName.value,
+    email: editEmail.value,
+    password: editPassword.value,
+    island: editIslandSelect.value
+  };
+
+  await editUser(currentUser.id, updatedUser);
+
+  const newUser = {
+    ...currentUser,
+    ...updatedUser,
+  };
+  localStorage.setItem("current-user", JSON.stringify(newUser));
+  window.location.reload();
+});
+
+  // Botón Logout:
+  // const logOutButton = document.createElement("button");
+  // logOutButton.textContent = "Log out";
+  // logOutButton.addEventListener("click", () => {
+  //   localStorage.removeItem("current-user");
+  //   navigate("/login");
+  // });
+  // profileContainer.appendChild(logOutButton);
+
+  profileContainer.appendChild(welcomeMessage);
+  profileContainer.appendChild(profileImage);
+  profileContainer.appendChild(imageSelector);
+  profileContainer.appendChild(userInfo);
+  profileContainer.appendChild(editButton);
+  profileContainer.appendChild(editForm);
+  editForm.appendChild(editName);
+  editForm.appendChild(editEmail);
+  editForm.appendChild(editPassword);
+  editForm.appendChild(repeatPasswordInput);
+  editForm.appendChild(editIslandSelect);
+  editForm.appendChild(saveButton);
+
+  container.appendChild(profileContainer);
+}
