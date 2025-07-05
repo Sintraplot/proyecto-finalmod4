@@ -10,7 +10,7 @@ main {
   flex: 1;
 }
 
-/*Login style*/
+/* Login style
 body {
     font-family: Arial, sans-serif;
     display: flex;
@@ -71,4 +71,4 @@ button:hover {
     font-size: 0.9em;
     margin-top: 5px;
     display: none;
-}
+} */

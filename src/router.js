@@ -18,7 +18,7 @@ const routes = {
 
 const publicPaths = ["/login", "/signup", "/", "/user/:id"]; // páginas publicas con acceso sin estar logeado
 
-export function router() {
+export async function router() {
   const path = window.location.pathname;
   const currentUser = getCurrentUser();
 

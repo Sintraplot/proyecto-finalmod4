@@ -1,4 +1,4 @@
-export function dataValidations({name, email, password, repeatPassword}) {
+export function dataValidations({ name, email, password, repeatPassword }) {
   if (name !== undefined) {
     if (name.length < 2 || !name) {
       alert("Name must have 2 characters or more.");
@@ -6,7 +6,6 @@ export function dataValidations({name, email, password, repeatPassword}) {
       return false;
     }
   }
-
 
   const regexEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
@@ -20,7 +19,8 @@ export function dataValidations({name, email, password, repeatPassword}) {
     }
   }
 
-  const regexPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])([A-Za-z\d$@$!%*?&]|[^ ]){8,15}$/;
+  const regexPassword =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])([A-Za-z\d$@$!%*?&]|[^ ]){8,15}$/;
 
   if (password !== undefined) {
     if (!regexPassword.test(password)) {
@@ -32,43 +32,26 @@ export function dataValidations({name, email, password, repeatPassword}) {
     }
   }
 
-    if(repeatPassword !== password) {
-        alert("Repeat password must be the same as password")
-        //showToast
-        return false;
-    };
+  if (repeatPassword !== password) {
+    alert("Repeat password must be the same as password");
+    //showToast
+    return false;
+  }
 
   return true;
 }
 
-//Validations Login
-let isValid = true;
+//Validaciones Login
+export function loginValidations(loginEmail, loginPassword) {
+  if (!loginEmail) {
+    // Aquí irá el Toastify
+    return false;
+  }
 
-    if (!loginEmail) {
-      loginEmailError.textContent = "User field is required";
-      loginEmailError.style.display = "block";
-      isValid = false;
-    }
+  if (!loginPassword) {
+    // Aquí irá el Toastify
+    return false;
+  }
 
-    if (!loginPassword) {
-      loginPasswordError.textContent = "El password field is required";
-      loginPasswordError.style.display = "block";
-      isValid = false;
-    }
-
-    if (!isValid) return;
-
-    // Verificar credenciales contra la base de datos
-    const user = usersDatabase.find(
-      (user) => user.email === loginEmail && user.password === loginPassword
-    );
-
-    if (user) {
-      alert("¡Login successful! Welcome! " + loginEmail);
-      // Aquí puedes redirigir a otra página o realizar otras acciones
-    } else {
-      passwordError.textContent = "Incorrect useremail or password";
-      passwordError.style.display = "block";
-    }
-  
-
+  return true;
+}
