@@ -1,4 +1,5 @@
 import { createNewUser } from "../api/apiUsers.js";
+import { showToast } from "../utils/toastify.js";
 import { dataValidations } from "../utils/validations";
 
 export function Signup(container) {
@@ -52,13 +53,19 @@ export function Signup(container) {
       signupName,
       signupEmail,
       signupPassword,
-      signupIsland};
+      signupIsland
+    };
 
-   await createNewUser(userData);
-
-   console.log("Usuario creado con éxito");
-
-      window.location.href = `/login`
+    try {
+      await createNewUser(userData);
+      showToast("sigup successful", "success");
+      setTimeout(() => {
+        window.location.href = "/login";
+      }, 1000);
+    } catch (error) {
+      console.error("Error de registro", error);
+      showToast("Error de registro: No se pudi crear el usuario", "error");
+    }   
     }
   });
 }

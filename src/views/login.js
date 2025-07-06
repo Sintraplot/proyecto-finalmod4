@@ -2,6 +2,7 @@ import { getUsers } from "../api/apiUsers";
 import { navigate } from "../router";
 import { loginValidations } from "../utils/validations";
 import { renderNavbar } from "../utils/navbar.js";
+import { showToast } from "../utils/toastify.js";
 
 export function Login(container) {
   container.innerHTML = `
@@ -29,7 +30,7 @@ export function Login(container) {
 
     // Usar función de validación
     if (!loginValidations(loginEmail, loginPassword)) {
-      return;
+        return;
     }
 
     try {
@@ -38,6 +39,7 @@ export function Login(container) {
 
       // Asegurarse
       if (!Array.isArray(users)) {
+        showToast("datos inválidos recibido de la API", 'error')
         throw new Error("Datos inválidos recibidos de la API");
       }
 
@@ -49,26 +51,20 @@ export function Login(container) {
       if (matchedUser) {
         // Almacenar el usuario que coincide en localStorage
         localStorage.setItem("currentUser", JSON.stringify(matchedUser));
-        console.log(
-          "Login successful! User stored in localStorage:",
-          matchedUser
+        console.log("Login successful! User stored in localStorage:", matchedUser
         );
-
         // Actualizar navbar
         renderNavbar(matchedUser);
-
+        showToast("login successful", 'success');
         navigate("/");
       } else {
-        // Manejar credenciales inválidas
-        // Aquí irá el Toastify para credencia  les inválidas
-        document.getElementById("loginPassword").value = "";
-        console.error("No se encontró un usuario coincidente.");
+        // Manejar credenciales inválidas                     
+        showToast("login error: email or password incorrect", 'error');
       }
     } catch (error) {
-      // Manejar errores de getUsers o otros problemas
-      // Aquí irá el Toastify para errores de conexión
-      document.getElementById("loginPassword").value = "";
-      console.error("Login error:", error);
+      // Manejar errores de getUsers o otros problemas       
+        console.error("Login error:", error);
+         showToast("login error", 'error');
     }
   });
 }
