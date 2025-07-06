@@ -2,6 +2,7 @@ import { getUsers } from "../api/apiUsers.js";
 import { navigate } from "../router.js";
 import { loginValidations } from "../utils/validations.js";
 import { renderNavbar } from "../utils/navbar.js";
+import { showToast } from "../utils/toastify.js";
 
 export function Login(container) {
   container.innerHTML = `
@@ -46,6 +47,7 @@ export function Login(container) {
 
       // Asegurarse
       if (!Array.isArray(users)) {
+        showToast("datos inválidos recibido de la API", 'error')
         throw new Error("Datos inválidos recibidos de la API");
       }
 

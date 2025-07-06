@@ -1,4 +1,10 @@
-import { editUser, getCurrentUser } from "../api/apiUsers.js";
+import { editUser, getCurrentUser } from "../api/apiUsers";
+import defaultAvatar from "../assets/images/default-avatar.png";
+import avatar1 from "../assets/images/avatar1.png";
+import avatar2 from "../assets/images/avatar2.png";
+import avatar3 from "../assets/images/avatar3.png";
+import { getAllMovies } from "../api/apiTMDB";
+import { navigate } from "../router.js";
 
 export function Profile(container, params) {
   const userId = params.id; //user.id de localstorage
@@ -20,43 +26,47 @@ function userProfile(container) {
   const welcomeMessage = document.createElement("h2");
   welcomeMessage.textContent = `Welcome ${currentUser.name}! Enjoy your films.`;
 
-  // Foto de perfil:
   const profileImage = document.createElement("img");
   profileImage.className = "profile-image";
-  profileImage.src =
-    currentUser.imageURL || "/assets/images/icons8-user-64.png";
+
+  profileImage.src = currentUser.imageURL || defaultAvatar;
   profileImage.alt = "Profile image";
 
-  const imageOptions = [
-    "/assets/images/Avatar1.png",
-    "/assets/images/Avatar2.png",
-    "/assets/images/Avatar3.png",
-  ];
+  const imageSelectorContainer = document.createElement("div");
+  imageSelectorContainer.className = "image-selector-container";
 
-  const imageSelector = document.createElement("div");
-  imageSelector.className = "image-selector";
+  const changeAvatarButton = document.createElement("button");
+  changeAvatarButton.textContent = "Change avatar";
+  changeAvatarButton.type = "button";
 
-  imageOptions.forEach((imageUrl) => {
+  const avatarOptionsContainer = document.createElement("div");
+  avatarOptionsContainer.className = "avatar-options";
+
+  const avatarOptions = [avatar1, avatar2, avatar3];
+
+  avatarOptions.forEach(avatar => {
     const option = document.createElement("img");
     option.className = "profile-option";
-    option.src = imageUrl;
+    option.src = avatar;
     option.alt = "Profile image option";
 
     option.addEventListener("click", () => {
-      profileImage.src = imageUrl;
-      currentUser.imageURL = imageUrl;
+      profileImage.src = avatar;
+      currentUser.imageURL = avatar;
       localStorage.setItem("currentUser", JSON.stringify(currentUser));
     });
 
-    imageSelector.appendChild(option);
+    avatarOptionsContainer.appendChild(option);
   });
+
+changeAvatarButton.addEventListener("click", () => {
+  avatarOptionsContainer.classList.toggle("hidden");
+});
 
   const userInfo = document.createElement("div");
   userInfo.innerHTML = `
     <p>Nombre: ${currentUser.name}</p>
     <p>Email: ${currentUser.email}</p>`;
-
-  //Editar usuario
 
   const editButton = document.createElement("button");
   editButton.textContent = "Edit profile";
@@ -108,8 +118,6 @@ function userProfile(container) {
     editIslandSelect.appendChild(option);
   });
 
-  //Guardar cambios
-
   const saveButton = document.createElement("button");
   saveButton.textContent = "Update profile";
   saveButton.type = "submit";
@@ -126,49 +134,34 @@ function userProfile(container) {
     const originalText = saveButton.textContent;
     saveButton.textContent = "Updating...";
     saveButton.disabled = true;
+    
+  //   if (passwordInput.value !== repeatPasswordInput.value) {
+  //     alert("Repeat password must be the same password");
+  //   return;
+  // }
+  
+  const updatedUser = {
+    name: editName.value,
+    email: editEmail.value,
+    password: editPassword.value,
+    island: editIslandSelect.value
+  };
 
-    try {
-      //   if (passwordInput.value !== repeatPasswordInput.value) {
-      //     alert("Repeat password must be the same password");
-      //   return;
-      // }
+  await editUser(currentUser.id, updatedUser);
 
-      const updatedUser = {
-        name: editName.value,
-        email: editEmail.value,
-        password: editPassword.value,
-        island: editIslandSelect.value,
-      };
-
-      await editUser(currentUser.id, updatedUser);
-
-      const newUser = {
-        ...currentUser,
-        ...updatedUser,
-      };
-      localStorage.setItem("currentUser", JSON.stringify(newUser));
-      window.location.reload();
-    } catch (error) {
-      console.error("Error updating profile:", error);
-    } finally {
-      // Restaurar botón
-      saveButton.textContent = originalText;
-      saveButton.disabled = false;
-    }
-  });
-
-  // Botón Logout:
-  // const logOutButton = document.createElement("button");
-  // logOutButton.textContent = "Log out";
-  // logOutButton.addEventListener("click", () => {
-  //   localStorage.removeItem("current-user");
-  //   navigate("/login");
-  // });
-  // profileContainer.appendChild(logOutButton);
+  const newUser = {
+    ...currentUser,
+    ...updatedUser,
+  };
+  localStorage.setItem("currentUser", JSON.stringify(newUser));
+  window.location.reload();
+});
 
   profileContainer.appendChild(welcomeMessage);
   profileContainer.appendChild(profileImage);
-  profileContainer.appendChild(imageSelector);
+  imageSelectorContainer.appendChild(changeAvatarButton);
+  imageSelectorContainer.appendChild(avatarOptionsContainer);
+  profileContainer.appendChild(imageSelectorContainer);
   profileContainer.appendChild(userInfo);
   profileContainer.appendChild(editButton);
   profileContainer.appendChild(editForm);
@@ -178,6 +171,68 @@ function userProfile(container) {
   editForm.appendChild(repeatPasswordInput);
   editForm.appendChild(editIslandSelect);
   editForm.appendChild(saveButton);
+  
 
+  const userFavoriteIds = currentUser.favorites || [];
+  console.log("Favorite IDs:", userFavoriteIds);
+
+  getAllMovies().then((allMovies) => {
+    console.log("All Movies:", allMovies);
+
+    const favoriteMovies = allMovies.filter(movie =>
+      userFavoriteIds.includes(movie.id)
+    );
+
+    console.log("Matched favorite movies:", favoriteMovies);
+
+    const favoritesSection = document.createElement("div");
+    favoritesSection.className = "favorites-section";
+    favoritesSection.innerHTML = `
+      <h3>Your favorite movies:</h3>
+      <section class="movies-grid">
+        ${renderMovieCards(favoriteMovies, userFavoriteIds)}
+      </section>
+    `;
+
+    profileContainer.appendChild(favoritesSection);
+
+    const favButtons = favoritesSection.querySelectorAll(".fav-btn");
+    favButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const movieId = parseInt(button.getAttribute("data-id"), 10);
+        currentUser.favorites = currentUser.favorites.filter(id => id !== movieId);
+        
+        localStorage.setItem("currentUser", JSON.stringify(currentUser));
+        
+        container.innerHTML = "";
+        userProfile(container);
+      });
+    });
+  });
   container.appendChild(profileContainer);
+}
+
+function renderMovieCards(movies, favoriteIds = []) {
+  return movies
+    .map((movie) => {
+      const isFavorite = favoriteIds.includes(movie.id);
+      const heartIcon = isFavorite ? "❤️" : "🤍";
+
+      return `
+        <div class="movie-wrapper">
+          <a href="/movie/${movie.id}" data-link class="movie-card">
+            <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title}" />
+            <div class="movie-info">
+              <h3>${movie.title}</h3>
+              <p>${movie.release_date}</p>
+              <p>⭐ ${movie.vote_average.toFixed(1)}</p>
+            </div>
+          </a>
+          <button class="fav-btn" data-id="${movie.id}" title="Toggle favorite">
+            ${heartIcon}
+          </button>
+        </div>
+      `;
+    })
+    .join("");
 }

@@ -1,6 +1,8 @@
 import { createNewUser } from "../api/apiUsers.js";
 import { dataValidations } from "../utils/validations.js";
 import { navigate } from "../router.js";
+import { showToast } from "../utils/toastify.js";
+
 
 export function Signup(container) {
   const newUserdiv = document.createElement("div");
@@ -79,6 +81,7 @@ export function Signup(container) {
       // Restaurar botón
       submitButton.textContent = originalText;
       submitButton.disabled = false;
+   
     }
   });
 }

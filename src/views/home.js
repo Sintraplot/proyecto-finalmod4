@@ -7,10 +7,8 @@ export async function Home(container, favoriteIds, onToggleFavorite) {
 
   const movies = await getAllMovies();
 
-  //se puede hacer con desestructuración también y se repetiría menos movie.key (movie.id, movie.title, etc)
-  // y se podría poner directamente id, title, etc.
   const moviesHTML = movies
-    .map(function (movie) {
+    .map((movie) => {
       const isFavorite = favoriteIds.includes(movie.id);
       const heartIcon = isFavorite ? "❤️" : "🤍";
 
@@ -34,11 +32,10 @@ export async function Home(container, favoriteIds, onToggleFavorite) {
         </div>
       `;
     })
-    .join(""); //con map se obtiene un array de strings (cada pelicula) y luego se junta cada html con join para meterlo todo junto como bloque HTML
+    .join("");
 
   container.innerHTML = `<section class="movies-grid">${moviesHTML}</section>`;
 
-  // Añadir eeventos a los botones favoritos
   const favButtons = container.querySelectorAll(".fav-btn");
 
   favButtons.forEach((button) => {
