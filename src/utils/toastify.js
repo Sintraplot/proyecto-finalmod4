@@ -11,7 +11,7 @@ export const showToast = (message, type = 'info') => {
       backgroundColor = 'linear-gradient(to right, #00b09b, #96c93d)';
       break;
     case 'error':
-      backgroundColor = 'linear-gradient(to right, #ff5f6d, #ffc371)';
+      backgroundColor = 'linear-gradient(to right,rgb(215, 21, 37),rgb(180, 6, 6))';
       break;
     case 'warning':
       backgroundColor = 'linear-gradient(to right,rgb(255, 114, 59),rgb(231, 128, 32))';
