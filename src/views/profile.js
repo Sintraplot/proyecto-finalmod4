@@ -1,4 +1,8 @@
 import { editUser, getCurrentUser } from "../api/apiUsers";
+import defaultAvatar from "../assets/images/default-avatar.png";
+import avatar1 from "../assets/images/avatar1.png";
+import avatar2 from "../assets/images/avatar2.png";
+import avatar3 from "../assets/images/avatar3.png";
 
 export function Profile(container, params) {
   const userId = params.id; //user.id de localstorage
@@ -23,39 +27,45 @@ function userProfile(container) {
   // Foto de perfil:
   const profileImage = document.createElement("img");
   profileImage.className = "profile-image";
-  profileImage.src = currentUser.imageURL || "/assets/images/icons8-user-64.png";; 
+  profileImage.src = currentUser.avatar || defaultAvatar;
   profileImage.alt = "Profile image";
-  
-  
-  const imageOptions = [ 
-  "/assets/images/Avatar1.png",
-  "/assets/images/Avatar2.png",
-  "/assets/images/Avatar3.png"
-  ];
-  
-  const imageSelector = document.createElement("div");
-  imageSelector.className = "image-selector";
-  
-  imageOptions.forEach(imageUrl => {
-  const option = document.createElement("img");
-  option.className = "profile-option";
-  option.src = imageUrl;
-  option.alt = "Profile image option";
-  
-  option.addEventListener("click", () => {
-    profileImage.src = imageUrl;
-    currentUser.imageURL = imageUrl;
-    localStorage.setItem("current-user", JSON.stringify(currentUser));
+
+  const imageSelectorContainer = document.createElement("div");
+  imageSelectorContainer.className = "image-selector-container";
+
+  const changeAvatarButton = document.createElement("button");
+  changeAvatarButton.textContent = "Change avatar";
+  changeAvatarButton.type = "button";
+
+  const avatarOptionsContainer = document.createElement("div");
+  avatarOptionsContainer.className = "avatar-options";
+
+  const avatarOptions = [avatar1, avatar2, avatar3];
+
+  avatarOptions.forEach(avatar => {
+    const option = document.createElement("img");
+    option.className = "profile-option";
+    option.src = avatar;
+    option.alt = "Profile image option";
+
+    option.addEventListener("click", () => {
+      profileImage.src = avatar;
+      currentUser.avatar = avatar;
+      localStorage.setItem("current-user", JSON.stringify(currentUser));
+    });
+
+    avatarOptionsContainer.appendChild(option);
   });
 
-  imageSelector.appendChild(option);
+// Mostrar/Ocultar al hacer click
+changeAvatarButton.addEventListener("click", () => {
+  avatarOptionsContainer.classList.toggle("hidden");
 });
 
   const userInfo = document.createElement("div");
   userInfo.innerHTML = `
     <p>Nombre: ${currentUser.name}</p>
     <p>Email: ${currentUser.email}</p>`;
-
 
   //Editar usuario
 
@@ -137,18 +147,15 @@ function userProfile(container) {
   window.location.reload();
 });
 
-  // Botón Logout:
-  // const logOutButton = document.createElement("button");
-  // logOutButton.textContent = "Log out";
-  // logOutButton.addEventListener("click", () => {
-  //   localStorage.removeItem("current-user");
-  //   navigate("/login");
-  // });
-  // profileContainer.appendChild(logOutButton);
-
   profileContainer.appendChild(welcomeMessage);
   profileContainer.appendChild(profileImage);
-  profileContainer.appendChild(imageSelector);
+  // profileContainer.appendChild(imageSelector);
+
+  imageSelectorContainer.appendChild(changeAvatarButton);
+  imageSelectorContainer.appendChild(avatarOptionsContainer);
+  profileContainer.appendChild(profileImage);
+  profileContainer.appendChild(imageSelectorContainer);
+
   profileContainer.appendChild(userInfo);
   profileContainer.appendChild(editButton);
   profileContainer.appendChild(editForm);
