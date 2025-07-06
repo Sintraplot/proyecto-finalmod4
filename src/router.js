@@ -39,12 +39,10 @@ export async function router() {
       navigate("/login");
       return;
     }
-
-    const favoriteIds = await getUserFavorites(currentUser.id);
-    console.log("Loaded favorites from backend:", favoriteIds);
-    Home(container, favoriteIds, (movieId) =>
-      onToggleFavorite(movieId, container)
-    );
+  
+  Home(container, (movieId) =>
+  onToggleFavorite(movieId, container)
+);
   }
 
   // Ruta login
