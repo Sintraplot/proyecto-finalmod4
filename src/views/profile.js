@@ -3,6 +3,8 @@ import defaultAvatar from "../assets/images/default-avatar.png";
 import avatar1 from "../assets/images/avatar1.png";
 import avatar2 from "../assets/images/avatar2.png";
 import avatar3 from "../assets/images/avatar3.png";
+import { getAllMovies } from "../api/apiTMDB";
+import { navigate } from "../router.js";
 
 export function Profile(container, params) {
   const userId = params.id; //user.id de localstorage
@@ -24,10 +26,9 @@ function userProfile(container) {
   const welcomeMessage = document.createElement("h2");
   welcomeMessage.textContent = `Welcome ${currentUser.name}! Enjoy your films.`;
 
-  // Foto de perfil:
   const profileImage = document.createElement("img");
   profileImage.className = "profile-image";
-  profileImage.src = currentUser.avatar || defaultAvatar;
+  profileImage.src = currentUser.imageURL || defaultAvatar;
   profileImage.alt = "Profile image";
 
   const imageSelectorContainer = document.createElement("div");
@@ -50,14 +51,13 @@ function userProfile(container) {
 
     option.addEventListener("click", () => {
       profileImage.src = avatar;
-      currentUser.avatar = avatar;
-      localStorage.setItem("current-user", JSON.stringify(currentUser));
+      currentUser.imageURL = avatar;
+      localStorage.setItem("currentUser", JSON.stringify(currentUser));
     });
 
     avatarOptionsContainer.appendChild(option);
   });
 
-// Mostrar/Ocultar al hacer click
 changeAvatarButton.addEventListener("click", () => {
   avatarOptionsContainer.classList.toggle("hidden");
 });
@@ -66,8 +66,6 @@ changeAvatarButton.addEventListener("click", () => {
   userInfo.innerHTML = `
     <p>Nombre: ${currentUser.name}</p>
     <p>Email: ${currentUser.email}</p>`;
-
-  //Editar usuario
 
   const editButton = document.createElement("button");
   editButton.textContent = "Edit profile";
@@ -112,8 +110,6 @@ changeAvatarButton.addEventListener("click", () => {
     editIslandSelect.appendChild(option);
   });
 
-  //Guardar cambios
-
   const saveButton = document.createElement("button");
   saveButton.textContent = "Update profile";
   saveButton.type = "submit";
@@ -143,19 +139,15 @@ changeAvatarButton.addEventListener("click", () => {
     ...currentUser,
     ...updatedUser,
   };
-  localStorage.setItem("current-user", JSON.stringify(newUser));
+  localStorage.setItem("currentUser", JSON.stringify(newUser));
   window.location.reload();
 });
 
   profileContainer.appendChild(welcomeMessage);
   profileContainer.appendChild(profileImage);
-  // profileContainer.appendChild(imageSelector);
-
   imageSelectorContainer.appendChild(changeAvatarButton);
   imageSelectorContainer.appendChild(avatarOptionsContainer);
-  profileContainer.appendChild(profileImage);
   profileContainer.appendChild(imageSelectorContainer);
-
   profileContainer.appendChild(userInfo);
   profileContainer.appendChild(editButton);
   profileContainer.appendChild(editForm);
@@ -165,6 +157,68 @@ changeAvatarButton.addEventListener("click", () => {
   editForm.appendChild(repeatPasswordInput);
   editForm.appendChild(editIslandSelect);
   editForm.appendChild(saveButton);
+  
 
+  const userFavoriteIds = currentUser.favorites || [];
+  console.log("Favorite IDs:", userFavoriteIds);
+
+  getAllMovies().then((allMovies) => {
+    console.log("All Movies:", allMovies);
+
+    const favoriteMovies = allMovies.filter(movie =>
+      userFavoriteIds.includes(movie.id)
+    );
+
+    console.log("Matched favorite movies:", favoriteMovies);
+
+    const favoritesSection = document.createElement("div");
+    favoritesSection.className = "favorites-section";
+    favoritesSection.innerHTML = `
+      <h3>Your favorite movies:</h3>
+      <section class="movies-grid">
+        ${renderMovieCards(favoriteMovies, userFavoriteIds)}
+      </section>
+    `;
+
+    profileContainer.appendChild(favoritesSection);
+
+    const favButtons = favoritesSection.querySelectorAll(".fav-btn");
+    favButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const movieId = parseInt(button.getAttribute("data-id"), 10);
+        currentUser.favorites = currentUser.favorites.filter(id => id !== movieId);
+        
+        localStorage.setItem("currentUser", JSON.stringify(currentUser));
+        
+        container.innerHTML = "";
+        userProfile(container);
+      });
+    });
+  });
   container.appendChild(profileContainer);
+}
+
+function renderMovieCards(movies, favoriteIds = []) {
+  return movies
+    .map((movie) => {
+      const isFavorite = favoriteIds.includes(movie.id);
+      const heartIcon = isFavorite ? "❤️" : "🤍";
+
+      return `
+        <div class="movie-wrapper">
+          <a href="/movie/${movie.id}" data-link class="movie-card">
+            <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title}" />
+            <div class="movie-info">
+              <h3>${movie.title}</h3>
+              <p>${movie.release_date}</p>
+              <p>⭐ ${movie.vote_average.toFixed(1)}</p>
+            </div>
+          </a>
+          <button class="fav-btn" data-id="${movie.id}" title="Toggle favorite">
+            ${heartIcon}
+          </button>
+        </div>
+      `;
+    })
+    .join("");
 }
