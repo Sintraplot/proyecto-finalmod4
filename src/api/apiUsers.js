@@ -14,6 +14,9 @@ export async function createNewUser(user) {
         email: user.signupEmail,
         password: user.signupPassword,
         island: user.signupIsland,
+        favourites: [],
+      
+      
       }),
     });
     if (!response.ok) {
@@ -25,6 +28,7 @@ export async function createNewUser(user) {
     console.error(error);
   }
 }
+
 
 // get User
 

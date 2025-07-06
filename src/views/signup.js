@@ -12,7 +12,18 @@ export function Signup(container) {
     <input type="email" id="registerFormEmail" placeholder="Email" required>
     <input type="password" id="registerFormPassword" placeholder="Password" required>
     <input type="password" id="registerFormRepPassword" placeholder="Repeat password" required>
-    <input type="text" id="registerFormIsland" placeholder="Island">
+    <label for="registerFormIsland">Island of residence</label>
+    <select name="registerFormIsland" id="registerFormIsland">
+     <option value="" disabled selected>Select your island</option>
+     <option value="Tfe">Tenerife</option>
+     <option value="LPa">La Palma</option>
+     <option value="Gom">La Gomera</option>
+     <option value="Hrr">El Hierro</option>
+     <option value="GranC">Gran Canaria</option>
+     <option value="Fvra">Fuerteventura</option>
+     <option value="Lzte">Lanzarote</option>
+     <option value="LGra">La Graciosa</option>
+    </select>
     <button type="submit">Sign up</button>
     </form>`;
 
@@ -32,7 +43,7 @@ export function Signup(container) {
       .value.trim();
     const signupIsland = document
       .getElementById("registerFormIsland")
-      .value.trim();
+      .value;
 
     const validations = dataValidations({name: signupName, email: signupEmail, password: signupPassword, repeatPassword: signupRepPassword, island: signupIsland});
     
@@ -41,11 +52,13 @@ export function Signup(container) {
       signupName,
       signupEmail,
       signupPassword,
-      signupRepPassword,
       signupIsland};
 
-      await createNewUser(userData);
-      //añadir redirección
+   await createNewUser(userData);
+
+   console.log("Usuario creado con éxito");
+
+      window.location.href = `/login`
     }
   });
 }
