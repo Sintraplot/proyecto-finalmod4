@@ -14,9 +14,7 @@ export async function createNewUser(user) {
         email: user.signupEmail,
         password: user.signupPassword,
         island: user.signupIsland,
-        favourites: [],
-      
-      
+        favorites: [],
       }),
     });
     if (!response.ok) {
@@ -29,7 +27,6 @@ export async function createNewUser(user) {
   }
 }
 
-
 // get User
 
 export async function getUsers() {
@@ -40,7 +37,6 @@ export async function getUsers() {
       throw new Error("Error en la petición getAllUsers");
     }
     const users = await response.json();
-    console.log(users); // Para depuración
     return users; // Devolver explícitamente el arreglo de usuarios
   } catch (error) {
     console.error("Error en getUsers:", error);
@@ -60,8 +56,13 @@ export async function getUsers() {
 //------------------------
 
 export function getCurrentUser() {
-  const storedUser = localStorage.getItem("currentUser");
-  return storedUser ? JSON.parse(storedUser) : null;
+  try {
+    const storedUser = localStorage.getItem("currentUser");
+    return storedUser ? JSON.parse(storedUser) : null;
+  } catch (error) {
+    console.error("Error getting current user:", error);
+    return null;
+  }
 }
 
 //Edit user
@@ -80,7 +81,7 @@ export async function editUser(id, userData) {
         password: userData.password,
         // repeatPassword: userData.repeatPassword  Tener en cuenta nombre desde MOCKAPI
         // island: userData.island,
-        // favourites: userData.favourites
+        // favorites: userData.favorites
       }),
     });
 
@@ -89,8 +90,6 @@ export async function editUser(id, userData) {
     }
 
     const updatedUser = await response.json();
-
-    console.log(updatedUser, "User updated");
   } catch (error) {
     console.error(error);
   }
@@ -142,7 +141,6 @@ export async function updateFavoritesBackend(userId, favorites) {
     }
 
     const updatedUser = await putResponse.json();
-    console.log("User favorites updated:", updatedUser);
     return updatedUser;
   } catch (error) {
     console.error(error);
