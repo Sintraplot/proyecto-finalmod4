@@ -1,6 +1,8 @@
 import { createNewUser } from "../api/apiUsers.js";
+import { dataValidations } from "../utils/validations.js";
+import { navigate } from "../router.js";
 import { showToast } from "../utils/toastify.js";
-import { dataValidations } from "../utils/validations";
+
 
 export function Signup(container) {
   const newUserdiv = document.createElement("div");
@@ -32,40 +34,54 @@ export function Signup(container) {
 
   formNewUser.addEventListener("submit", async (event) => {
     event.preventDefault();
-    const signupName = document.getElementById("registerFormName").value.trim();
-    const signupEmail = document
-      .getElementById("registerFormEmail")
-      .value.trim();
-    const signupPassword = document
-      .getElementById("registerFormPassword")
-      .value.trim();
-    const signupRepPassword = document
-      .getElementById("registerFormRepPassword")
-      .value.trim();
-    const signupIsland = document
-      .getElementById("registerFormIsland")
-      .value;
 
-    const validations = dataValidations({name: signupName, email: signupEmail, password: signupPassword, repeatPassword: signupRepPassword, island: signupIsland});
-    
-    if(validations) {
-      const userData = {
-      signupName,
-      signupEmail,
-      signupPassword,
-      signupIsland
-    };
+    // Mostrar loading state
+    const submitButton = formNewUser.querySelector("button[type='submit']");
+    const originalText = submitButton.textContent;
+    submitButton.textContent = "Creating account...";
+    submitButton.disabled = true;
 
     try {
-      await createNewUser(userData);
-      showToast("sigup successful", "success");
-      setTimeout(() => {
-        window.location.href = "/login";
-      }, 1000);
+      const signupName = document
+        .getElementById("registerFormName")
+        .value.trim();
+      const signupEmail = document
+        .getElementById("registerFormEmail")
+        .value.trim();
+      const signupPassword = document
+        .getElementById("registerFormPassword")
+        .value.trim();
+      const signupRepPassword = document
+        .getElementById("registerFormRepPassword")
+        .value.trim();
+      const signupIsland = document.getElementById("registerFormIsland").value;
+
+      const validations = dataValidations({
+        name: signupName,
+        email: signupEmail,
+        password: signupPassword,
+        repeatPassword: signupRepPassword,
+        island: signupIsland,
+      });
+
+      if (validations) {
+        const userData = {
+          signupName,
+          signupEmail,
+          signupPassword,
+          signupIsland,
+        };
+
+        await createNewUser(userData);
+        navigate("/login");
+      }
     } catch (error) {
-      console.error("Error de registro", error);
-      showToast("Error de registro: No se pudi crear el usuario", "error");
-    }   
+      console.error("Error creating user:", error);
+    } finally {
+      // Restaurar botón
+      submitButton.textContent = originalText;
+      submitButton.disabled = false;
+   
     }
   });
 }

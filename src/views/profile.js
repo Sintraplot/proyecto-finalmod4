@@ -9,15 +9,15 @@ import { navigate } from "../router.js";
 export function Profile(container, params) {
   const userId = params.id; //user.id de localstorage
   container.innerHTML = `<h1>Perfil del usuario ${userId}</h1>`;
-  
+
   userProfile(container);
 }
 
 function userProfile(container) {
   const currentUser = getCurrentUser();
-  
+
   if (!currentUser) {
-    alert("You are not logged in. Please return to login.")
+    alert("You are not logged in. Please return to login.");
     return;
   }
 
@@ -28,6 +28,7 @@ function userProfile(container) {
 
   const profileImage = document.createElement("img");
   profileImage.className = "profile-image";
+
   profileImage.src = currentUser.imageURL || defaultAvatar;
   profileImage.alt = "Profile image";
 
@@ -97,10 +98,17 @@ changeAvatarButton.addEventListener("click", () => {
   const editIslandSelect = document.createElement("select");
   editIslandSelect.id = "edit-island";
   const editIslands = [
-    "Tenerife", "La Palma", "La Gomera", "El Hierro", "Gran Canaria", "Fuerteventura", "Lanzarote", "La Graciosa"
+    "Tenerife",
+    "La Palma",
+    "La Gomera",
+    "El Hierro",
+    "Gran Canaria",
+    "Fuerteventura",
+    "Lanzarote",
+    "La Graciosa",
   ];
 
-  editIslands.forEach(editIsland => {
+  editIslands.forEach((editIsland) => {
     const option = document.createElement("option");
     option.value = editIsland;
     option.textContent = editIsland;
@@ -117,9 +125,15 @@ changeAvatarButton.addEventListener("click", () => {
   editButton.addEventListener("click", () => {
     editForm.classList.toggle("hidden");
   });
-  
+
   editForm.addEventListener("submit", async (e) => {
     e.preventDefault();
+
+    // Mostrar loading state
+    const saveButton = editForm.querySelector("button[type='submit']");
+    const originalText = saveButton.textContent;
+    saveButton.textContent = "Updating...";
+    saveButton.disabled = true;
     
   //   if (passwordInput.value !== repeatPasswordInput.value) {
   //     alert("Repeat password must be the same password");

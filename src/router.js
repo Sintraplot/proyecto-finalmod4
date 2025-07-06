@@ -7,6 +7,7 @@ import { NotFound } from "./views/notFound.js";
 import { getCurrentUser } from "./api/apiUsers.js";
 import { getUserFavorites } from "./api/apiUsers.js";
 import { onToggleFavorite } from "./utils/favorites.js";
+import { showSpinner } from "./utils/spinner.js";
 
 const routes = {
   "/": Home,
@@ -35,14 +36,24 @@ export async function router() {
   // Rutas estáticas
   if (path === "/") {
     const currentUser = getCurrentUser();
+
     if (!currentUser) {
       navigate("/login");
       return;
     }
-  
-  Home(container, (movieId) =>
-  onToggleFavorite(movieId, container)
-);
+
+    // Mostrar spinner inmediatamente
+    showSpinner(container, "Loading...");
+
+    try {
+      const favoriteIds = await getUserFavorites(currentUser.id);
+      Home(container, favoriteIds, (movieId) =>
+        onToggleFavorite(movieId, container)
+      );
+    } catch (error) {
+      console.error("Error loading favorites:", error);
+      Home(container, [], (movieId) => onToggleFavorite(movieId, container));
+    }
   }
 
   // Ruta login
