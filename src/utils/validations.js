@@ -3,7 +3,6 @@ import { showToast } from "../utils/toastify";
 export function dataValidations({ name, email, password, repeatPassword }) {
   if (name !== undefined) {
     if (name.length < 2 || !name) {
-      alert("Name must have 2 characters or more.");
       showToast("Name must have 2 characters or more.", 'warning');
       return false;
     }
@@ -27,12 +26,17 @@ export function dataValidations({ name, email, password, repeatPassword }) {
         "Password must contain 8 min characters and 15 max characters, at least one uppercase, one lowercase, one digit and one special character.", 'warning');
     return false;
     }
-  }
+    
+    if (!repeatPassword) {
+      showToast("Repeat password is required", 'warning');
+      return false;
+    }
 
-  if (repeatPassword !== password) {    
-    showToast("Repeat password must be the same as password", 'warning');
-    return false;
-  }
+    if (repeatPassword !== password) {
+      showToast("Repeat password must be the same as password", 'warning');
+      return false;
+    }
+  };
 
   return true;
 }

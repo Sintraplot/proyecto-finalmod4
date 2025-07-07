@@ -79,9 +79,8 @@ export async function editUser(id, userData) {
         name: userData.name,
         email: userData.email,
         password: userData.password,
-        // repeatPassword: userData.repeatPassword  Tener en cuenta nombre desde MOCKAPI
-        // island: userData.island,
-        // favorites: userData.favorites
+        island: userData.island,
+        imageURL: userData.imageURL,
       }),
     });
 
