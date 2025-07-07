@@ -1,10 +1,10 @@
 import { editUser, getCurrentUser } from "../api/apiUsers";
+import { dataValidations } from "../utils/validations.js";
 import defaultAvatar from "../assets/images/default-avatar.png";
 import avatar1 from "../assets/images/avatar1.png";
 import avatar2 from "../assets/images/avatar2.png";
 import avatar3 from "../assets/images/avatar3.png";
 import { getAllMovies } from "../api/apiTMDB";
-import { navigate } from "../router.js";
 
 export function Profile(container, params) {
   const userId = params.id; //user.id de localstorage
@@ -31,38 +31,41 @@ function userProfile(container) {
 
   profileImage.src = currentUser.imageURL || defaultAvatar;
   profileImage.alt = "Profile image";
-
-  const imageSelectorContainer = document.createElement("div");
-  imageSelectorContainer.className = "image-selector-container";
-
-  const changeAvatarButton = document.createElement("button");
-  changeAvatarButton.textContent = "Change avatar";
-  changeAvatarButton.type = "button";
-
+  
   const avatarOptionsContainer = document.createElement("div");
-  avatarOptionsContainer.className = "avatar-options";
-
+  avatarOptionsContainer.className = "avatar-options hidden";
+  
   const avatarOptions = [avatar1, avatar2, avatar3];
-
+  
   avatarOptions.forEach(avatar => {
     const option = document.createElement("img");
     option.className = "profile-option";
     option.src = avatar;
     option.alt = "Profile image option";
-
-    option.addEventListener("click", () => {
+    
+    option.addEventListener("click", async () => {
       profileImage.src = avatar;
       currentUser.imageURL = avatar;
+      
       localStorage.setItem("currentUser", JSON.stringify(currentUser));
+      try {
+        await editUser(currentUser.id, {imageURL: avatar});
+      } catch (error) {
+        console.error("Error al actualizar avatar en backend:", error);
+      }
     });
-
+    
     avatarOptionsContainer.appendChild(option);
   });
-
-changeAvatarButton.addEventListener("click", () => {
-  avatarOptionsContainer.classList.toggle("hidden");
-});
-
+  
+  const changeAvatarButton = document.createElement("button");
+  changeAvatarButton.textContent = "Change avatar";
+  changeAvatarButton.type = "button";
+  
+  changeAvatarButton.addEventListener("click", () => {
+    avatarOptionsContainer.classList.toggle("hidden");
+  });
+  
   const userInfo = document.createElement("div");
   userInfo.innerHTML = `
     <p>Nombre: ${currentUser.name}</p>
@@ -94,27 +97,31 @@ changeAvatarButton.addEventListener("click", () => {
   repeatPasswordInput.type = "password";
   repeatPasswordInput.id = "repeat-password";
   repeatPasswordInput.placeholder = "Repeat password";
-
+  
   const editIslandSelect = document.createElement("select");
   editIslandSelect.id = "edit-island";
+  
   const editIslands = [
-    "Tenerife",
-    "La Palma",
-    "La Gomera",
-    "El Hierro",
-    "Gran Canaria",
-    "Fuerteventura",
-    "Lanzarote",
-    "La Graciosa",
+    {label: "Select your island", value: ""},
+    {label: "Tenerife", value: "Tfe"},
+    {label: "La Palma", value: "LPa"},
+    {label: "La Gomera", value: "Gom"},
+    {label: "El Hierro", value: "Hrr"},
+    {label: "Gran Canaria", value: "GranC"},
+    {label: "Fuerteventura", value: "Fvra"},
+    {label: "Lanzarote", value: "Lzte"},
+    {label: "La Graciosa", value: "LGra"},
   ];
-
-  editIslands.forEach((editIsland) => {
+  
+  editIslands.forEach((islandOption) => {
     const option = document.createElement("option");
-    option.value = editIsland;
-    option.textContent = editIsland;
-    if (editIsland === currentUser.island) {
+    option.value = islandOption.value;
+    option.textContent = islandOption.label;
+    
+    if (islandOption.value === currentUser.island) {
       option.selected = true;
     }
+    
     editIslandSelect.appendChild(option);
   });
 
@@ -135,33 +142,49 @@ changeAvatarButton.addEventListener("click", () => {
     saveButton.textContent = "Updating...";
     saveButton.disabled = true;
     
-  //   if (passwordInput.value !== repeatPasswordInput.value) {
-  //     alert("Repeat password must be the same password");
-  //   return;
-  // }
-  
-  const updatedUser = {
-    name: editName.value,
-    email: editEmail.value,
-    password: editPassword.value,
-    island: editIslandSelect.value
-  };
-
-  await editUser(currentUser.id, updatedUser);
-
-  const newUser = {
-    ...currentUser,
-    ...updatedUser,
-  };
-  localStorage.setItem("currentUser", JSON.stringify(newUser));
-  window.location.reload();
-});
+    const name = editName.value.trim();
+    const email = editEmail.value.trim();
+    const password = editPassword.value;
+    const repeatPassword = repeatPasswordInput.value;
+    const island = editIslandSelect.value;
+    
+    const updatedUser = {};
+    if (name && name !== currentUser.name) updatedUser.name = name;
+    if (email && email !== currentUser.email) updatedUser.email = email;
+    if (password) {
+      updatedUser.password = password;
+      updatedUser.repeatPassword = repeatPassword;
+    }
+    if (island !== currentUser.island) updatedUser.island = island;
+    
+    const isValid = dataValidations({
+      name: updatedUser.name,
+      email: updatedUser.email,
+      password: updatedUser.password,
+      repeatPassword: updatedUser.repeatPassword,
+    });
+    
+    if (!isValid) {
+      saveButton.textContent = originalText;
+      saveButton.disabled = false;
+      return;
+    }
+    
+    await editUser(currentUser.id, updatedUser);
+    
+    const newUser = {
+      ...currentUser,
+      ...updatedUser,
+    };
+    
+    localStorage.setItem("currentUser", JSON.stringify(newUser));
+    window.location.reload();
+  });
 
   profileContainer.appendChild(welcomeMessage);
   profileContainer.appendChild(profileImage);
-  imageSelectorContainer.appendChild(changeAvatarButton);
-  imageSelectorContainer.appendChild(avatarOptionsContainer);
-  profileContainer.appendChild(imageSelectorContainer);
+  profileContainer.appendChild(changeAvatarButton);
+  profileContainer.appendChild(avatarOptionsContainer);
   profileContainer.appendChild(userInfo);
   profileContainer.appendChild(editButton);
   profileContainer.appendChild(editForm);
