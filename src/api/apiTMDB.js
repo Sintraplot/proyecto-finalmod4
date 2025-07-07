@@ -65,18 +65,18 @@ export  function showSelectedMovies(filteredMovies, container) {
 
 //función para que en cada categoría esté lo que corresponda
 
-export async function genderMovies(genreId) {
+export async function genreMovies(genreId) {
 
     const theMovies = await getAllMovies();
     console.log (theMovies);
    
-   const filteredByGender = theMovies.filter(movie =>
+   const filteredByGenre = theMovies.filter(movie =>
     movie.genre_ids.includes(Number(genreId)) // Convertimos genreId a número por si viene como string
   );
 
 
 
-  return filteredByGender; 
+  return filteredByGenre; 
 }
     
 
