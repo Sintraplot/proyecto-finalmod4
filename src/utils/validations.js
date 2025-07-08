@@ -53,5 +53,6 @@ export function loginValidations(loginEmail, loginPassword) {
     return false;
   }
 
+  showToast("Login successful", 'success');
   return true;
 }

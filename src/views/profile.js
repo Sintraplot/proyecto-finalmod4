@@ -5,6 +5,7 @@ import avatar1 from "../assets/images/avatar1.png";
 import avatar2 from "../assets/images/avatar2.png";
 import avatar3 from "../assets/images/avatar3.png";
 import { getAllMovies } from "../api/apiTMDB";
+import { showToast } from "../utils/toastify.js";
 
 export function Profile(container, params) {
   const userId = params.id; //user.id de localstorage
@@ -16,8 +17,8 @@ export function Profile(container, params) {
 function userProfile(container) {
   const currentUser = getCurrentUser();
 
-  if (!currentUser) {
-    alert("You are not logged in. Please return to login.");
+  if (!currentUser) {    
+    showToast("You are not logged in. Please return to login.", 'error');
     return;
   }
 
@@ -170,7 +171,7 @@ function userProfile(container) {
       return;
     }
     
-    await editUser(currentUser.id, updatedUser);
+    await editUser(currentUser.id, updatedUser);    
     
     const newUser = {
       ...currentUser,
@@ -178,7 +179,12 @@ function userProfile(container) {
     };
     
     localStorage.setItem("currentUser", JSON.stringify(newUser));
-    window.location.reload();
+    showToast("Profile updated", 'success');
+    setTimeout(() => {
+      window.location.reload();
+    },1000);
+    
+    
   });
 
   profileContainer.appendChild(welcomeMessage);
