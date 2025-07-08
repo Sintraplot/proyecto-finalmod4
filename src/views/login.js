@@ -13,7 +13,7 @@ export function Login(container) {
                 <input type="text" id="loginEmail" placeholder="Enter your email">
             </div>
             <div class="form-group">
-                <label for="loginPassword">password:</label>
+                <label for="loginPassword">Password:</label>
                 <input type="password" id="loginPassword" placeholder="Enter password">
             </div>
             <button type="submit">Login</button>
@@ -52,34 +52,27 @@ export function Login(container) {
       }
 
       // Buscar un usuario con email y contraseña que coincidan
-      const matchedUser = users.find(
-        (user) => user.email === loginEmail && user.password === loginPassword
-      );
+      const matchedUser = users.find(user => 
+            user.email === loginEmail && user.password === loginPassword
+        );
 
-      if (matchedUser) {
-        // Almacenar el usuario que coincide en localStorage
-        localStorage.setItem("currentUser", JSON.stringify(matchedUser));
+        if (matchedUser) {
+            // Store the matched user in localStorage
+            localStorage.setItem("currentUser", JSON.stringify(matchedUser));      
+            renderNavbar(matchedUser);
+            navigate("/");
+            
 
-        // Actualizar navbar
-        renderNavbar(matchedUser);
-
-        // Navegar inmediatamente
-        navigate("/");
-      } else {
-        // Manejar credenciales inválidas
-        // Aquí irá el Toastify para credenciales inválidas
-        document.getElementById("loginPassword").value = "";
-        console.error("No se encontró un usuario coincidente.");
-      }
+        } else {
+            // Handle invalid credentials                        
+            console.error("No se encontró un usuario coincidente.");
+            showToast("login error: email or password incorrect", "error");
+        }
     } catch (error) {
-      // Manejar errores de getUsers o otros problemas
-      // Aquí irá el Toastify para errores de conexión
-      document.getElementById("loginPassword").value = "";
-      console.error("Login error:", error);
-    } finally {
-      // Restaurar botón
-      submitButton.textContent = originalText;
-      submitButton.disabled = false;
+        // Handle errors from getUsers or other issues
+        console.error("sigup error:", error);
+        showToast("sigup error", "error");
     }
+  
   });
 }

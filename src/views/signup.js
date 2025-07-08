@@ -71,6 +71,7 @@ export function Signup(container) {
           signupPassword,
           signupIsland,
         };
+        showToast("Registed User");
 
         await createNewUser(userData);
         navigate("/login");
