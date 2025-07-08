@@ -7,16 +7,18 @@ export function renderMovies(container, movies, favoriteIds, onToggleFavorite) {
       return `
         <div class="movie-wrapper">
           <a href="/movie/${movie.id}" data-link class="movie-card">
-            <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title}" />
+            <img src="https://image.tmdb.org/t/p/w500${
+              movie.poster_path
+            }" alt="${movie.title}" />
+            <button class="fav-btn" data-id="${
+              movie.id
+            }" title="Toggle favorite">${heartIcon}</button>
             <div class="movie-info">
               <h3>${movie.title}</h3>
               <p>${movie.release_date}</p>
               <p>⭐ ${movie.vote_average.toFixed(1)}</p>
             </div>
           </a>
-          <button class="fav-btn" data-id="${movie.id}" title="Toggle favorite">
-            ${heartIcon}
-          </button>
         </div>
       `;
     })
@@ -31,6 +33,7 @@ export function renderMovies(container, movies, favoriteIds, onToggleFavorite) {
   favButtons.forEach((button) => {
     button.addEventListener("click", (e) => {
       e.preventDefault();
+      e.stopPropagation(); //esto hace que cuando haga click en fav no vaya a la pagina de detalle de la peli
       const movieId = Number(button.dataset.id);
       onToggleFavorite(movieId, container);
     });

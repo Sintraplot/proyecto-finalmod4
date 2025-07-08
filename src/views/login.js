@@ -3,6 +3,7 @@ import { navigate } from "../router.js";
 import { loginValidations } from "../utils/validations.js";
 import { renderNavbar } from "../utils/navbar.js";
 import { showToast } from "../utils/toastify.js";
+import { showSpinner } from "../utils/spinner.js";
 
 export function Login(container) {
   container.innerHTML = `
@@ -25,12 +26,6 @@ export function Login(container) {
   loginForm.addEventListener("submit", async function (event) {
     event.preventDefault();
 
-    // Mostrar loading state
-    const submitButton = loginForm.querySelector("button[type='submit']");
-    const originalText = submitButton.textContent;
-    submitButton.textContent = "Logging in...";
-    submitButton.disabled = true;
-
     try {
       const loginEmail = document.getElementById("loginEmail").value.trim();
       const loginPassword = document
@@ -47,32 +42,32 @@ export function Login(container) {
 
       // Asegurarse
       if (!Array.isArray(users)) {
-        showToast("datos inválidos recibido de la API", 'error')
+        showToast("datos inválidos recibido de la API", "error");
         throw new Error("Datos inválidos recibidos de la API");
       }
 
       // Buscar un usuario con email y contraseña que coincidan
-      const matchedUser = users.find(user => 
-            user.email === loginEmail && user.password === loginPassword
-        );
+      const matchedUser = users.find(
+        (user) => user.email === loginEmail && user.password === loginPassword
+      );
 
-        if (matchedUser) {
-            // Store the matched user in localStorage
-            localStorage.setItem("currentUser", JSON.stringify(matchedUser));      
-            renderNavbar(matchedUser);
-            navigate("/");
-            showToast("Login success", 'success');
+      showSpinner(container, "Logging in...");
 
-        } else {
-            // Handle invalid credentials                        
-            console.error("No se encontró un usuario coincidente.");
-            showToast("Login error: email or password incorrect", "error");
-        }
+      if (matchedUser) {
+        // Store the matched user in localStorage
+        localStorage.setItem("currentUser", JSON.stringify(matchedUser));
+        renderNavbar(matchedUser);
+        navigate("/");
+        showToast("Login success", "success");
+      } else {
+        // Handle invalid credentials
+        console.error("No se encontró un usuario coincidente.");
+        showToast("Login error: email or password incorrect", "error");
+      }
     } catch (error) {
-        // Handle errors from getUsers or other issues
-        console.error("sigup error:", error);
-        showToast("Sigup error", "error");
+      // Handle errors from getUsers or other issues
+      console.error("sigup error:", error);
+      showToast("Sigup error", "error");
     }
-  
   });
 }

@@ -8,6 +8,7 @@ import { getCurrentUser } from "./api/apiUsers.js";
 import { getUserFavorites } from "./api/apiUsers.js";
 import { onToggleFavorite } from "./utils/favorites.js";
 import { showSpinner } from "./utils/spinner.js";
+import { showToast } from "./utils/toastify.js";
 
 const routes = {
   "/": Home,
@@ -28,17 +29,16 @@ export async function router() {
   const container = document.getElementById("app");
   container.innerHTML = "";
 
-  // Protecciones y redirecciones (añadir luego)
-
-  // //Si usuario no está logeado y quiere ir a rutas privadas
-  // //Si usuario está logeado y quiere ir a signup or login (no tiene sentido)
+  if ((path === "/login" || path === "/signup") && currentUser) {
+    navigate("/");
+    return;
+  }
 
   // Rutas estáticas
   if (path === "/") {
-    const currentUser = getCurrentUser();
-
     if (!currentUser) {
       navigate("/login");
+      showToast("You must be logged in to access this page.", "error");
       return;
     }
 
@@ -70,6 +70,12 @@ export async function router() {
 
   // Rutas dinámicas /movie/:id
   if (path.startsWith("/movie/")) {
+    if (!currentUser) {
+      navigate("/login");
+      showToast("You must be logged in to access this page.", "error");
+      return;
+    }
+
     const movieId = path.split("/")[2];
     MovieDetail(container, movieId);
     return;
@@ -77,6 +83,14 @@ export async function router() {
 
   // Rutas dinámicas /user/:id
   if (path.startsWith("/user/")) {
+    const currentUser = getCurrentUser();
+
+    if (!currentUser) {
+      navigate("/login");
+      showToast("You must be logged in to access this page.", "error");
+      return;
+    }
+
     const userId = path.split("/")[2];
     Profile(container, userId);
     return;
