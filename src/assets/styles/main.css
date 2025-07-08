@@ -222,10 +222,15 @@ button:hover {
 }
 
 .profile-image {
-  width: 70px;
-  height: 70px;
+  width: 100px;
+  height: 100px;
   object-fit: cover;
   border-radius: 50%;
   display: block;
   margin: 1rem;
+}
+
+.profile-option {
+  width: 80px;
+  height: 80px;
 }
