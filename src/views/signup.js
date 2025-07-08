@@ -2,9 +2,10 @@ import { createNewUser } from "../api/apiUsers.js";
 import { dataValidations } from "../utils/validations.js";
 import { navigate } from "../router.js";
 import { showToast } from "../utils/toastify.js";
-
+import { showSpinner } from "../utils/spinner.js";
 
 export function Signup(container) {
+  container.innerHTML = "";
   const newUserdiv = document.createElement("div");
   newUserdiv.classList.add("divNewUser");
   container.appendChild(newUserdiv);
@@ -35,26 +36,22 @@ export function Signup(container) {
   formNewUser.addEventListener("submit", async (event) => {
     event.preventDefault();
 
-    // Mostrar loading state
-    const submitButton = formNewUser.querySelector("button[type='submit']");
-    const originalText = submitButton.textContent;
-    submitButton.textContent = "Creating account...";
-    submitButton.disabled = true;
-
     try {
-      const signupName = document
-        .getElementById("registerFormName")
-        .value.trim();
-      const signupEmail = document
-        .getElementById("registerFormEmail")
-        .value.trim();
-      const signupPassword = document
-        .getElementById("registerFormPassword")
-        .value.trim();
-      const signupRepPassword = document
-        .getElementById("registerFormRepPassword")
-        .value.trim();
-      const signupIsland = document.getElementById("registerFormIsland").value;
+      const signupNameInput = document.getElementById("registerFormName");
+      const signupEmailInput = document.getElementById("registerFormEmail");
+      const signupPasswordInput = document.getElementById(
+        "registerFormPassword"
+      );
+      const signupRepPasswordInput = document.getElementById(
+        "registerFormRepPassword"
+      );
+      const signupIslandInput = document.getElementById("registerFormIsland");
+
+      const signupName = signupNameInput.value.trim();
+      const signupEmail = signupEmailInput.value.trim();
+      const signupPassword = signupPasswordInput.value.trim();
+      const signupRepPassword = signupRepPasswordInput.value.trim();
+      const signupIsland = signupIslandInput.value;
 
       const validations = dataValidations({
         name: signupName,
@@ -64,6 +61,8 @@ export function Signup(container) {
         island: signupIsland,
       });
 
+      showSpinner(container, "Creating account...");
+
       if (validations) {
         const userData = {
           signupName,
@@ -71,18 +70,13 @@ export function Signup(container) {
           signupPassword,
           signupIsland,
         };
-        showToast("Registed User");
+        showToast("Registered User", "success");
 
         await createNewUser(userData);
         navigate("/login");
       }
     } catch (error) {
       console.error("Error creating user:", error);
-    } finally {
-      // Restaurar botón
-      submitButton.textContent = originalText;
-      submitButton.disabled = false;
-   
     }
   });
 }

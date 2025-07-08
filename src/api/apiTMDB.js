@@ -18,33 +18,19 @@ export async function getAllMovies() {
   }
 }
 
-// Obtener detalles de la pelicula-----------------
-
-//función para filtrar las películas por título
-export async function searchMovies(infoSearched) {
-
-    const allMovies = await getAllMovies(); //me traigo todas las pelis y lkas meto en una constante
-    const lowerInfosearched = infoSearched.toLowerCase();
-
-    const filteredMovies = allMovies.filter(movie =>
-    movie.title.toLowerCase().includes(lowerInfosearched)  
-  );
-  
-    console.log (filteredMovies);
-
-    return filteredMovies;
-    
-}
-
 //function para mostrar las pelis seleccionadas
 
-export  function showSelectedMovies(filteredMovies, container) {
-    container.innerHTML = "";
+export function showSelectedMovies(filteredMovies, container) {
+  container.innerHTML = "";
 
-    const moviesHTML = filteredMovies.map(movie => `
+  const moviesHTML = filteredMovies
+    .map(
+      (movie) => `
     <div class="movie-wrapper">
       <a href="/movie/${movie.id}" data-link class="movie-card">
-        <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title}" />
+        <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${
+        movie.title
+      }" />
         <div class="movie-info">
           <h3>${movie.title}</h3>
           <p>${movie.release_date}</p>
@@ -52,31 +38,12 @@ export  function showSelectedMovies(filteredMovies, container) {
         </div>
       </a>
     </div>
-  `).join("");
+  `
+    )
+    .join("");
 
   container.innerHTML = moviesHTML;
 }
-
-
-
-
-//función para que en cada categoría esté lo que corresponda
-
-export async function genreMovies(genreId) {
-
-    const theMovies = await getAllMovies();
-    console.log (theMovies);
-   
-   const filteredByGenre = theMovies.filter(movie =>
-    movie.genre_ids.includes(Number(genreId)) // Convertimos genreId a número por si viene como string
-  );
-
-
-
-  return filteredByGenre; 
-}
-    
-
 
 export async function getMovieDetails(movieId) {
   const url = `${baseTMDBUrl}/${movieId}?api_key=${apiKey}`;

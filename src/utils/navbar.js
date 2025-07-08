@@ -1,4 +1,5 @@
 import { navigate } from "../router.js";
+import { clearMovieCache } from "./movieCache.js";
 
 export function renderNavbar(user) {
   const navbar = document.querySelector("nav");
@@ -16,6 +17,9 @@ export function renderNavbar(user) {
 
       // Limpiar localStorage
       localStorage.removeItem("currentUser");
+
+      //Limpiar el cache de pelis
+      clearMovieCache();
 
       // Actualizar navbar
       renderNavbar(null);
