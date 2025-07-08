@@ -1,20 +1,20 @@
 
 import { getAllMovies } from "../api/apiTMDB.js";
+
 import { searchMovies } from "../api/apiTMDB.js";
 import { showSelectedMovies } from "../api/apiTMDB.js";
 import { genreMovies } from "../api/apiTMDB.js";
 import { renderMovies } from "../utils/render.js";
-
-
+import { showSpinner } from "../utils/spinner.js";
 
 export async function Home(container, favoriteIds, onToggleFavorite) {
-  const movies = await getAllMovies();
-  console.log("Movies loaded:", movies);
-  console.log("Favorites used:", favoriteIds);
+  // Mostrar spinner
+  showSpinner(container, "Loading...");
 
+  const movies = await getAllMovies();
 
   //  Limpiar el contenedor antes de renderizar
-  container.innerHTML = "";// ESTO NO SE LO HE ENSEÑADO AÚN!!!!!!!!!-----------------------
+  container.innerHTML = "";
 
   //  Crear el buscador y los botones de clasificación por género
   const searchBox = document.createElement("div");
@@ -104,4 +104,3 @@ clearBtn.addEventListener("click", async () => {
   renderMovies(container, allMovies, favoriteIds, onToggleFavorite);
 });
 }
-

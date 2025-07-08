@@ -1,7 +1,8 @@
-import { getUsers } from "../api/apiUsers";
-import { navigate } from "../router";
-import { loginValidations } from "../utils/validations";
+import { getUsers } from "../api/apiUsers.js";
+import { navigate } from "../router.js";
+import { loginValidations } from "../utils/validations.js";
 import { renderNavbar } from "../utils/navbar.js";
+import { showToast } from "../utils/toastify.js";
 
 export function Login(container) {
   container.innerHTML = `
@@ -24,20 +25,29 @@ export function Login(container) {
   loginForm.addEventListener("submit", async function (event) {
     event.preventDefault();
 
-    const loginEmail = document.getElementById("loginEmail").value.trim();
-    const loginPassword = document.getElementById("loginPassword").value.trim();
-
-    // Usar función de validación
-    if (!loginValidations(loginEmail, loginPassword)) {
-      return;
-    }
+    // Mostrar loading state
+    const submitButton = loginForm.querySelector("button[type='submit']");
+    const originalText = submitButton.textContent;
+    submitButton.textContent = "Logging in...";
+    submitButton.disabled = true;
 
     try {
+      const loginEmail = document.getElementById("loginEmail").value.trim();
+      const loginPassword = document
+        .getElementById("loginPassword")
+        .value.trim();
+
+      // Usar función de validación
+      if (!loginValidations(loginEmail, loginPassword)) {
+        return;
+      }
+
       // Traer usuarios de la base de datos
       const users = await getUsers();
 
       // Asegurarse
       if (!Array.isArray(users)) {
+        showToast("datos inválidos recibido de la API", 'error')
         throw new Error("Datos inválidos recibidos de la API");
       }
 
@@ -49,18 +59,15 @@ export function Login(container) {
       if (matchedUser) {
         // Almacenar el usuario que coincide en localStorage
         localStorage.setItem("currentUser", JSON.stringify(matchedUser));
-        console.log(
-          "Login successful! User stored in localStorage:",
-          matchedUser
-        );
 
         // Actualizar navbar
         renderNavbar(matchedUser);
 
+        // Navegar inmediatamente
         navigate("/");
       } else {
         // Manejar credenciales inválidas
-        // Aquí irá el Toastify para credencia  les inválidas
+        // Aquí irá el Toastify para credenciales inválidas
         document.getElementById("loginPassword").value = "";
         console.error("No se encontró un usuario coincidente.");
       }
@@ -69,6 +76,10 @@ export function Login(container) {
       // Aquí irá el Toastify para errores de conexión
       document.getElementById("loginPassword").value = "";
       console.error("Login error:", error);
+    } finally {
+      // Restaurar botón
+      submitButton.textContent = originalText;
+      submitButton.disabled = false;
     }
   });
 }
