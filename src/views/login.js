@@ -61,17 +61,17 @@ export function Login(container) {
             localStorage.setItem("currentUser", JSON.stringify(matchedUser));      
             renderNavbar(matchedUser);
             navigate("/");
-            
+            showToast("Login success", 'success');
 
         } else {
             // Handle invalid credentials                        
             console.error("No se encontró un usuario coincidente.");
-            showToast("login error: email or password incorrect", "error");
+            showToast("Login error: email or password incorrect", "error");
         }
     } catch (error) {
         // Handle errors from getUsers or other issues
         console.error("sigup error:", error);
-        showToast("sigup error", "error");
+        showToast("Sigup error", "error");
     }
   
   });
