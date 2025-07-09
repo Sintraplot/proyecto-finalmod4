@@ -1,5 +1,6 @@
 import { editUser, getCurrentUser, updateFavoritesBackend } from "../api/apiUsers";
 import { getAllMovies } from "../api/apiTMDB";
+import { renderMovies } from "../utils/render.js";
 import { dataValidations } from "../utils/validations.js";
 import { showToast } from "../utils/toastify.js";
 import defaultAvatar from "../assets/images/default-avatar.png";
@@ -8,13 +9,7 @@ import avatar2 from "../assets/images/chicken-avatar.png";
 import avatar3 from "../assets/images/dog-avatar.png";
 import avatar4 from "../assets/images/panda-avatar.png"
 
-export function Profile(container, params) {
-  const userId = params.id; //user.id de localstorage
-
-  userProfile(container);
-}
-
-async function userProfile(container) {
+export async function Profile(container) {
   const currentUser = getCurrentUser();
 
   if (!currentUser) {    
@@ -187,8 +182,6 @@ async function userProfile(container) {
     setTimeout(() => {
       window.location.reload();
     },1000);
-    
-    
   });
 
   profileContainer.appendChild(welcomeMessage);
@@ -218,58 +211,29 @@ async function userProfile(container) {
     );
 
     console.log("Matched favorite movies:", favoriteMovies);
-
+    
     const favoritesSection = document.createElement("div");
     favoritesSection.className = "favorites-section";
-    favoritesSection.innerHTML = `
-      <h3>Your favorite movies:</h3>
-      <section class="movies-grid">
-        ${renderMovieCards(favoriteMovies, userFavoriteIds)}
-      </section>
-    `;
-
+    
+    const favTitle = document.createElement("h3");
+    favTitle.textContent = "Your favorite movies:";
+    favoritesSection.appendChild(favTitle);
+    
+    renderMovies(favoritesSection, favoriteMovies, userFavoriteIds, async (movieId) => {
+      currentUser.favorites = currentUser.favorites.filter(id => id !== movieId);
+      await updateFavoritesBackend(currentUser.id, currentUser.favorites);
+      
+      localStorage.setItem("currentUser", JSON.stringify(currentUser));
+      
+      container.innerHTML = "";
+      Profile(container);
+    });
+    
     profileContainer.appendChild(favoritesSection);
 
-    const favButtons = favoritesSection.querySelectorAll(".fav-btn");
-    favButtons.forEach((button) => {
-      button.addEventListener("click", async () => {
-        const movieId = parseInt(button.getAttribute("data-id"), 10);
-        currentUser.favorites = currentUser.favorites.filter(id => id !== movieId);
-
-        await updateFavoritesBackend(currentUser.id, currentUser.favorites);
-        localStorage.setItem("currentUser", JSON.stringify(currentUser));
-        
-        container.innerHTML = "";
-        userProfile(container);
-      });
-    });
   } catch (error) {
     showToast("Failed to load favorite movies.", "error");
   }
   container.appendChild(profileContainer);
 }
 
-function renderMovieCards(movies, favoriteIds = []) {
-  return movies
-    .map((movie) => {
-      const isFavorite = favoriteIds.includes(movie.id);
-      const heartIcon = isFavorite ? "❤️" : "🤍";
-
-      return `
-        <div class="movie-wrapper">
-          <a href="/movie/${movie.id}" data-link class="movie-card">
-            <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title}" />
-            <div class="movie-info">
-              <h3>${movie.title}</h3>
-              <p>${movie.release_date}</p>
-              <p>⭐ ${movie.vote_average.toFixed(1)}</p>
-            </div>
-          </a>
-          <button class="fav-btn" data-id="${movie.id}" title="Toggle favorite">
-            ${heartIcon}
-          </button>
-        </div>
-      `;
-    })
-    .join("");
-}
