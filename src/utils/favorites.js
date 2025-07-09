@@ -96,7 +96,7 @@ export async function onToggleFavoriteDetail(movieId, container, movieData) {
 function updateFavoriteButton(container, movieId, isFavorite) {
   const favButton = container.querySelector(`[data-id="${movieId}"]`);
   if (favButton) {
-    const heartIcon = isFavorite ? "❤️" : "🤍";
+    const heartIcon = isFavorite ? "🩵" : "🤍";
     favButton.innerHTML = heartIcon;
     favButton.title = isFavorite ? "Remove from favorites" : "Add to favorites";
   }
