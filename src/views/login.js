@@ -8,7 +8,7 @@ import { showSpinner } from "../utils/spinner.js";
 export function Login(container) {
   container.innerHTML = `
     <form class="login-container" id= "login-form">
-            <h2>Login</h2>
+            <h2 class="login-title">Login</h2>
             <div class="form-group">
                 <label for="loginEmail">Email:</label>
                 <input type="text" id="loginEmail" placeholder="Enter your email">
@@ -17,7 +17,7 @@ export function Login(container) {
                 <label for="loginPassword">Password:</label>
                 <input type="password" id="loginPassword" placeholder="Enter password">
             </div>
-            <button type="submit">Login</button>
+            <button type="submit" class="button-outline">Login</button>
         </form>
     `;
 

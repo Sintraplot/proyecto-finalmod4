@@ -5,9 +5,11 @@ export function renderNavbar(user) {
   const navbar = document.querySelector("nav");
   if (user) {
     navbar.innerHTML = `
+    <div class="navbar">
       <a href="/" data-link>Home</a>
       <a href="/user/${user.id}" data-link>Profile</a>
       <a href="" id="logout" >Logout</a>
+    </div>
     `;
 
     // Añadir event listener al botón de logout
