@@ -219,7 +219,7 @@ button:hover {
 
 .movie-info p {
   margin: 0.25rem 0;
-  color: #555;
+  color: var(--text-secondary-color);
 }
 
 @media (max-width: 600px) {
