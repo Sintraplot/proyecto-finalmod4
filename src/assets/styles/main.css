@@ -8,6 +8,64 @@ body {
 
 main {
   flex: 1;
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+.button-primary {
+  cursor: pointer;
+  border: none;
+  outline: none;
+  background-color: var(--primary-color);
+  color: var(--text-color);
+  border-radius: var(--border-radius);
+  padding: 0.5rem 1rem;
+}
+
+.button-primary:hover {
+  background-color: var(--hover-color);
+}
+
+.button-secondary {
+  cursor: pointer;
+  border: none;
+  outline: none;
+  background-color: var(--white-color);
+  color: var(--black-color);
+  border-radius: var(--border-radius);
+  padding: 0.5rem 1rem;
+}
+
+.button-secondary:hover {
+  background-color: var(--primary-color);
+}
+
+.button-outline {
+  cursor: pointer;
+  border: 2px solid var(--white-color);
+  outline: none;
+  background-color: transparent;
+  color: var(--white-color);
+  border-radius: var(--border-radius);
+  padding: 0.5rem 1rem;
+}
+
+.button-outline:hover {
+  background-color: var(--white-color);
+  color: var(--black-color);
+}
+
+.navbar {
+  display: flex;
+  color: var(--text-color);
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background-color: var(--navbar-color);
+}
+
+.login-title {
+  font-family: var(--body-font-family);
 }
 
 /* Login style

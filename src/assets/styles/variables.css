@@ -1,0 +1,21 @@
+:root {
+    --primary-color: #16BBD6;
+    --hover-color: #0a8fbd;
+    --secondary-color: #922ecc;
+    --background-color: #242424;
+    --navbar-color: #0f0f0f;
+    --black-color: #030303;
+    --white-color: #ffffff;
+    --gray-color: #333333; /* Dark Gray */
+    --light-gray-color: #f0f0f0; /* Light Gray */
+    --text-color: #ffffff; 
+    --text-secondary-color: #b0b0b0; /* Light Gray */
+    --title-font-family: 'Anton', 'sans-serif';
+    --body-font-family: 'Montserrat', 'sans-serif';
+    --font-size-s: 16px;
+    --font-size-m: 20px;
+    --font-size-l: 24px;
+    --font-size-xl: 28px;
+    --border-radius: 18px;
+    --box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
