@@ -7,18 +7,19 @@ import { showSpinner } from "../utils/spinner.js";
 
 export function Login(container) {
   container.innerHTML = `
+  <div class= "div-form-login">
     <form class="login-container" id= "login-form">
             <h2 class="login-title">Login</h2>
             <div class="form-group">
-                <label for="loginEmail">Email:</label>
-                <input type="text" id="loginEmail" placeholder="Enter your email">
+                <label for="loginEmail">EMAIL:</label>
+                <input type="text" class="login-signup-input" id="loginEmail" placeholder="Enter your email">
+                <label for="loginPassword">PASSWORD:</label>
+                <input type="password" class="login-signup-input" id="loginPassword" placeholder="Enter your password">
+                <button type="submit" class="button-outline button-large">LOGIN</button>
             </div>
-            <div class="form-group">
-                <label for="loginPassword">Password:</label>
-                <input type="password" id="loginPassword" placeholder="Enter password">
-            </div>
-            <button type="submit" class="button-outline">Login</button>
+            
         </form>
+    </div>
     `;
 
   const loginForm = document.getElementById("login-form");

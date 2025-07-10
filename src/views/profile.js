@@ -17,7 +17,11 @@ export async function Profile(container) {
     return;
   }
 
+  const profileSection = document.createElement("section");
+  profileSection.className = "profile-section";
+
   const profileContainer = document.createElement("div");
+  profileContainer.className = "profile-container";
 
   const welcomeMessage = document.createElement("h2");
   welcomeMessage.textContent = `Welcome ${currentUser.name}! Enjoy your films.`;
@@ -61,45 +65,52 @@ export async function Profile(container) {
   const changeAvatarButton = document.createElement("button");
   changeAvatarButton.textContent = "Change avatar";
   changeAvatarButton.type = "button";
+  changeAvatarButton.className = "avatar button-primary";
 
   changeAvatarButton.addEventListener("click", () => {
     avatarOptionsContainer.classList.toggle("hidden");
   });
   
   const userInfo = document.createElement("div");
-  userInfo.innerHTML = `
+  userInfo.innerHTML = `<div class="profile-info">
     <p>Nombre: ${currentUser.name}</p>
-    <p>Email: ${currentUser.email}</p>`;
+    <p>Email: ${currentUser.email}</p>
+    </div>`;
 
   const editButton = document.createElement("button");
   editButton.textContent = "Edit profile";
-  editButton.className = "edit-profile-button";
+  editButton.className = "edit button-primary";
 
   const editForm = document.createElement("form");
-  editForm.classList.add("hidden");
+  editForm.classList.add("hidden", "profile-form");
 
   const editName = document.createElement("input");
   editName.type = "text";
   editName.id = "edit-name";
   editName.value = currentUser.name;
+  editName.className = "profile-input";
 
   const editEmail = document.createElement("input");
   editEmail.type = "email";
   editEmail.id = "edit-email";
   editEmail.value = currentUser.email;
+  editEmail.className = "profile-input";
 
   const editPassword = document.createElement("input");
   editPassword.type = "password";
   editPassword.id = "edit-password";
+  editPassword.className = "profile-input";
   editPassword.placeholder = "New password";
-
+  
   const repeatPasswordInput = document.createElement("input");
   repeatPasswordInput.type = "password";
   repeatPasswordInput.id = "repeat-password";
+  repeatPasswordInput.className = "profile-input";
   repeatPasswordInput.placeholder = "Repeat password";
   
   const editIslandSelect = document.createElement("select");
   editIslandSelect.id = "edit-island";
+  editIslandSelect.className = "profile-select";
   
   const editIslands = [
     {label: "Select your island", value: ""},
@@ -128,6 +139,7 @@ export async function Profile(container) {
   const saveButton = document.createElement("button");
   saveButton.textContent = "Update profile";
   saveButton.type = "submit";
+  saveButton.className = "save button-secondary";
 
   editButton.addEventListener("click", () => {
     editForm.classList.toggle("hidden");
@@ -136,7 +148,6 @@ export async function Profile(container) {
   editForm.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    // Mostrar loading state
     const saveButton = editForm.querySelector("button[type='submit']");
     const originalText = saveButton.textContent;
     saveButton.textContent = "Updating...";
@@ -183,7 +194,7 @@ export async function Profile(container) {
       window.location.reload();
     },1000);
   });
-
+  
   profileContainer.appendChild(welcomeMessage);
   profileContainer.appendChild(profileImage);
   profileContainer.appendChild(changeAvatarButton);
@@ -197,8 +208,8 @@ export async function Profile(container) {
   editForm.appendChild(repeatPasswordInput);
   editForm.appendChild(editIslandSelect);
   editForm.appendChild(saveButton);
+  profileSection.appendChild(profileContainer);
   
-
   const userFavoriteIds = currentUser.favorites || [];
   console.log("Favorite IDs:", userFavoriteIds);
 
@@ -209,7 +220,7 @@ export async function Profile(container) {
     const favoriteMovies = allMovies.filter(movie =>
       userFavoriteIds.includes(movie.id)
     );
-
+     
     console.log("Matched favorite movies:", favoriteMovies);
     
     const favoritesSection = document.createElement("div");
@@ -218,22 +229,30 @@ export async function Profile(container) {
     const favTitle = document.createElement("h3");
     favTitle.textContent = "Your favorite movies:";
     favoritesSection.appendChild(favTitle);
-    
-    renderMovies(favoritesSection, favoriteMovies, userFavoriteIds, async (movieId) => {
+
+    const favoritesCards = document.createElement("div");
+    favoritesCards.className = "favorites-cards";
+    favoritesSection.appendChild(favoritesCards);
+
+    renderMovies(favoritesCards, favoriteMovies, userFavoriteIds, async (movieId) => {
       currentUser.favorites = currentUser.favorites.filter(id => id !== movieId);
       await updateFavoritesBackend(currentUser.id, currentUser.favorites);
       
       localStorage.setItem("currentUser", JSON.stringify(currentUser));
-      
+     
       container.innerHTML = "";
       Profile(container);
     });
+    
+    const moviesGridSection = favoritesCards.querySelector(".movies-grid");
+    if (moviesGridSection) {
+      moviesGridSection.classList.add("favorites-cards");
+    }
     
     profileContainer.appendChild(favoritesSection);
 
   } catch (error) {
     showToast("Failed to load favorite movies.", "error");
   }
-  container.appendChild(profileContainer);
+  container.appendChild(profileSection);
 }
-

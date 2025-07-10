@@ -1,0 +1,162 @@
+.div-form-login {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 700px;
+
+  .login-container {
+    background-color: var(--gray-color);
+    width: 80%;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+    align-items: center;
+    .login-title {
+      text-transform: uppercase;
+      font-family: var(--title-font-family);
+      font-size: var(--font-size-xl);
+      color: var(--primary-color);
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      align-items: center;
+      width: 100%;
+
+      .login-signup-input:focus {
+        border: var(--primary-color);
+      }
+      .login-signup-input:focus {
+        outline: none;
+        border: 2px solid var(--primary-color);
+        box-shadow: var(--light-gray-color);
+      }
+    }
+
+    .login-signup-input,
+    .button-large {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 15px;
+      font-size: var(--font-size-s);
+      font-family: var(--body-font-family);
+      border-radius: var(--border-radius);
+      border: 1px solid var(--white-color);
+    }
+
+    .button-large:hover {
+      background-color: var(--hover-color);
+      border-color: var(--hover-color);
+      color: var(--primary-text-color);
+    }
+  }
+}
+
+@media (min-width: 1024px) {
+  .div-form-login {
+    width: 100%;
+    .login-container {
+      width: 40%;
+      .login-title {
+        font-size: 3rem;;
+      }
+      .button-large:active {
+        background-color: var(--hover-color);
+      }
+    }
+  }
+}
+
+/*estilado del sigup*/
+
+.div-form-sign-up {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 700px;
+  #divNewUserForm {
+    background-color: var(--gray-color);
+    width: 80%;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+    align-items: center;
+    .sign-up-title {
+      text-transform: uppercase;
+      font-family: var(--title-font-family);
+      font-size: var(--font-size-xl);
+      color: var(--primary-color);
+    }
+    .signup-input {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 12px;
+      font-size: var(--font-size-s);
+      font-family: var(--body-font-family);
+      border-radius: var(--border-radius);
+      border: 1px solid var(--white-color);
+    }
+    .signup-input:focus {
+        outline: none;
+        border: 2px solid var(--primary-color);
+        box-shadow: var(--light-gray-color);
+      }
+    .sign-up-text-label{
+      font-size: var(--font-size-m);
+      color: var(--text-secondary-color);
+      font-family:var(--body-font-family)
+    }
+    .option-signup{
+      background-color: var(--gray-color);
+      color: var(--text-color);
+    }
+    .small-sign-up {
+      display:block;
+      align-self: flex-start;
+      color: var(--text-secondary-color);
+      font-size: var(--font-size-s);
+      font-family:var(--body-font-family)
+    }
+
+    .button-large {
+        width: 100%;
+      box-sizing: border-box;
+      padding: 12px;
+      font-size: var(--font-size-s);
+      font-family: var(--body-font-family);
+      border-radius: var(--border-radius);
+      border: 1px solid var(--white-color);
+    }
+    .button-large:hover {
+      background-color: var(--hover-color);
+      border-color: var(--hover-color);
+      color: var(--primary-text-color);
+    }
+    .button-large:active{
+        background-color:var(--hover-color);
+    }
+  }
+}
+
+@media (min-width: 1024px) {
+  .div-form-sign-up {
+    width: 100%;
+    #divNewUserForm{
+      width: 40%;
+      .sign-up-title {
+        font-size: 3rem;
+      }
+      .button-large:active {
+        background-color: var(--hover-color);
+      }
+    }
+  }
+}
+
+
