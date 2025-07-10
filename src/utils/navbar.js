@@ -11,7 +11,7 @@ export function renderNavbar(user) {
           <span></span><span></span><span></span>
         </button>
         <ul id="navbar-list">
-          <li><a href="/" data-link>Home</a></li>
+          <li><a href="/home" data-link>Home</a></li>
           <li><a href="/user/${user.id}" data-link>Profile</a></li>
           <li><a href="" id="logout">Logout</a></li>
         </ul>
@@ -58,7 +58,7 @@ export function renderNavbar(user) {
           <span></span><span></span><span></span>
         </button>
         <ul id="navbar-list">
-          <li><a href="/" data-link>Home</a></li>
+          <li><a href="/home" data-link>Home</a></li>
           <li><a href="/login" data-link>Login</a></li>
           <li><a href="/signup" data-link>Sign up</a></li>
         </ul>
