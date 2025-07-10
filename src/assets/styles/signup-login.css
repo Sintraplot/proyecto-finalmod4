@@ -145,8 +145,12 @@
 }
 
 @media (min-width: 1024px) {
-  .div-form-sign-up {
+  .divNewUser {
     width: 100%;
+    .div-form-sign-up {
+    width: 100%;
+    display: flex;
+    flex-direction: row ;
     #divNewUserForm{
       width: 40%;
       .sign-up-title {
@@ -158,5 +162,7 @@
     }
   }
 }
+  }
+
 
 
