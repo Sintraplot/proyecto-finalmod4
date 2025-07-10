@@ -75,8 +75,8 @@ export function renderNavbar(user) {
       // Elimina el cambio de innerHTML, siempre muestra los tres spans
     });
     // Cerrar menú al hacer click en cualquier enlace
-    navList.addEventListener("click", (e) => {
-      if (e.target.tagName === "A") {
+    navList.addEventListener("click", (event) => {
+      if (event.target.tagName === "A") {
         navList.classList.remove("open");
         toggleBtn.classList.remove("open");
         toggleBtn.setAttribute("aria-expanded", false);

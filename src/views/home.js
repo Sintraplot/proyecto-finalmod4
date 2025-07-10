@@ -14,7 +14,7 @@ export async function Home(container, favoriteIds, onToggleFavorite) {
 
   //  Crear el buscador y los botones de clasificación por género
   const searchBox = document.createElement("div");
-  searchBox.classList.add("searchBox");
+  searchBox.classList.add("search-box");
   searchBox.innerHTML = `
     <div class="filter-container">
       <div class="input-search">
