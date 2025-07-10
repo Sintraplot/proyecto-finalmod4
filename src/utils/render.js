@@ -1,8 +1,10 @@
-export function renderMovies(container, movies, favoriteIds, onToggleFavorite) {
+import { onToggleFavorite } from "./favorites.js";
+
+export function renderMovies(container, movies, favoriteIds) {
   const moviesHTML = movies
     .map((movie) => {
       const isFavorite = favoriteIds.includes(movie.id);
-      const heartIcon = isFavorite ? "❤️" : "🤍";
+      const heartIcon = isFavorite ? "🩵" : "🤍";
 
       return `
         <div class="movie-wrapper">
@@ -13,7 +15,7 @@ export function renderMovies(container, movies, favoriteIds, onToggleFavorite) {
             <button class="fav-btn" data-id="${
               movie.id
             }" title="Toggle favorite">${heartIcon}</button>
-            <div class="movie-info">
+            <div class="movie-card-info">
               <h3>${movie.title}</h3>
               <p>${movie.release_date}</p>
               <p>⭐ ${movie.vote_average.toFixed(1)}</p>
@@ -25,7 +27,7 @@ export function renderMovies(container, movies, favoriteIds, onToggleFavorite) {
     .join("");
 
   const moviesSection = document.createElement("section");
-  moviesSection.classList.add("movies-grid", "all-movies");
+  moviesSection.classList.add("movie-list", "all-movies");
   moviesSection.innerHTML = moviesHTML;
   container.appendChild(moviesSection);
 
