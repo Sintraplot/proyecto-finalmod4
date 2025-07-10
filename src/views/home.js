@@ -2,7 +2,7 @@ import { renderMovies } from "../utils/render.js";
 import { showSpinner } from "../utils/spinner.js";
 import { getCachedMovies } from "../utils/movieCache.js";
 
-export async function Home(container, favoriteIds, onToggleFavorite) {
+export async function Home(container, favoriteIds) {
   // Mostrar spinner
   showSpinner(container, "Loading...");
 
@@ -56,7 +56,7 @@ export async function Home(container, favoriteIds, onToggleFavorite) {
    </div>`;
   container.appendChild(searchBox); //  ahora sí se queda en pantalla el buscador
 
-  renderMovies(container, movies, favoriteIds, onToggleFavorite); //mostramos todas las pelis TODAS
+  renderMovies(container, movies, favoriteIds); //mostramos todas las pelis TODAS
 
   //Ahora voy a poner el buscador
 
@@ -84,7 +84,7 @@ export async function Home(container, favoriteIds, onToggleFavorite) {
       notFoundMovies.style.marginTop = "40px";
       container.appendChild(notFoundMovies);
     } else {
-      renderMovies(container, filtered, favoriteIds, onToggleFavorite);
+      renderMovies(container, filtered, favoriteIds);
     }
   });
 
@@ -106,7 +106,7 @@ export async function Home(container, favoriteIds, onToggleFavorite) {
       const notFoundMessage = container.querySelector(".notFoundMovies");
       if (notFoundMessage) notFoundMessage.remove();
       if (genreId === "all") {
-        renderMovies(container, movies, favoriteIds, onToggleFavorite);
+        renderMovies(container, movies, favoriteIds);
       } else {
         const filteredByGenre = movies.filter((movie) =>
           movie.genre_ids.includes(Number(genreId))
@@ -119,12 +119,7 @@ export async function Home(container, favoriteIds, onToggleFavorite) {
           notFoundMovies.style.marginTop = "40px";
           moviesSelected.appendChild(notFoundMovies);
         } else {
-          renderMovies(
-            container,
-            filteredByGenre,
-            favoriteIds,
-            onToggleFavorite
-          );
+          renderMovies(container, filteredByGenre, favoriteIds);
         }
       }
     });
@@ -152,7 +147,7 @@ export async function Home(container, favoriteIds, onToggleFavorite) {
         notFoundMovies.style.marginTop = "40px";
         moviesSelected.appendChild(notFoundMovies);
       } else {
-        renderMovies(container, filteredByGenre, favoriteIds, onToggleFavorite);
+        renderMovies(container, filteredByGenre, favoriteIds);
       }
     });
   });
@@ -166,7 +161,7 @@ export async function Home(container, favoriteIds, onToggleFavorite) {
     if (allMoviesSection) allMoviesSection.remove(); //Si todas las películas están visibles las elimina para que no se dupliquen
     moviesSelected.innerHTML = "";
 
-    renderMovies(container, movies, favoriteIds, onToggleFavorite);
+    renderMovies(container, movies, favoriteIds);
   });
 
   // Añadir el h1

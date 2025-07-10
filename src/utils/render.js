@@ -1,4 +1,6 @@
-export function renderMovies(container, movies, favoriteIds, onToggleFavorite) {
+import { onToggleFavorite } from "./favorites.js";
+
+export function renderMovies(container, movies, favoriteIds) {
   const moviesHTML = movies
     .map((movie) => {
       const isFavorite = favoriteIds.includes(movie.id);
