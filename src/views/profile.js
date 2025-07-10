@@ -212,47 +212,63 @@ export async function Profile(container) {
   
   const userFavoriteIds = currentUser.favorites || [];
   console.log("Favorite IDs:", userFavoriteIds);
-
+  
   try {
     const allMovies = await getAllMovies();
     console.log("All Movies:", allMovies);
-
+    
     const favoriteMovies = allMovies.filter(movie =>
       userFavoriteIds.includes(movie.id)
     );
-     
+    
     console.log("Matched favorite movies:", favoriteMovies);
     
     const favoritesSection = document.createElement("div");
     favoritesSection.className = "favorites-section";
-    
+
     const favTitle = document.createElement("h3");
     favTitle.textContent = "Your favorite movies:";
+    favTitle.className = "favorites-title";
     favoritesSection.appendChild(favTitle);
 
     const favoritesCards = document.createElement("div");
     favoritesCards.className = "movie-list";
     favoritesSection.appendChild(favoritesCards);
 
-    renderMovies(favoritesCards, favoriteMovies, userFavoriteIds, async (movieId) => {
-      currentUser.favorites = currentUser.favorites.filter(id => id !== movieId);
-      await updateFavoritesBackend(currentUser.id, currentUser.favorites);
-      
-      localStorage.setItem("currentUser", JSON.stringify(currentUser));
-     
-      container.innerHTML = "";
-      Profile(container);
-    });
-    
-    const moviesGridSection = favoritesCards.querySelector(".movies-grid");
-    if (moviesGridSection) {
-      moviesGridSection.classList.add("favorites-cards");
+
+    function updateFavoriteCards(cardsContainer, movies, favoritesIds) {
+      renderMovies(cardsContainer, movies, favoritesIds);
+
+      const favButtons = cardsContainer.querySelectorAll(".fav-btn");
+      favButtons.forEach(button => {
+        button.addEventListener("click", async (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+
+          const movieId = Number(button.dataset.id);
+          console.log("Removing from favorites:", movieId);
+
+          currentUser.favorites = currentUser.favorites.filter(id => id !== movieId);
+          await updateFavoritesBackend(currentUser.id, currentUser.favorites);
+          localStorage.setItem("currentUser", JSON.stringify(currentUser));
+
+          const updatedMovies = allMovies.filter(movie =>
+            currentUser.favorites.includes(movie.id)
+          );
+
+          cardsContainer.innerHTML = "";
+          updateFavoriteCards(cardsContainer, updatedMovies, currentUser.favorites);
+        });
+      });
     }
     
+    updateFavoriteCards(favoritesCards, favoriteMovies, userFavoriteIds);
+    
     profileContainer.appendChild(favoritesSection);
-
+  
   } catch (error) {
     showToast("Failed to load favorite movies.", "error");
   }
+  
   container.appendChild(profileSection);
-}
+ }
