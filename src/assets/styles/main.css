@@ -54,7 +54,7 @@ main {
   background-color: var(--white-color);
   color: var(--black-color);
 }
-
+/*
 .navbar {
   display: flex;
   color: var(--text-color);
@@ -132,7 +132,7 @@ button:hover {
 } */
 
 /* home------------------------------------------------ */
-.movies-grid {
+/*.movies-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
   gap: 1rem;
@@ -238,7 +238,7 @@ button:hover {
 }
 
 /* Spinner styles */
-.spinner-container {
+/*.spinner-container {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -275,7 +275,7 @@ button:hover {
 
 /*Ocultar seleccionar archivo y edit form*/
 
-.hidden {
+/*.hidden {
   display: none;
 }
 
