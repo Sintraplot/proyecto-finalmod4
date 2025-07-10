@@ -19,7 +19,7 @@ export async function MovieDetail(container, movieId) {
       currentUser &&
       currentUser.favorites &&
       currentUser.favorites.includes(movie.id);
-    const heartIcon = isFavorite ? "❤️" : "🤍";
+    const heartIcon = isFavorite ? "🩵" : "🤍";
 
     // Formatear géneros como tags
     const genres = movie.genres

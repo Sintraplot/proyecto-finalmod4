@@ -231,7 +231,7 @@ export async function Profile(container) {
     favoritesSection.appendChild(favTitle);
 
     const favoritesCards = document.createElement("div");
-    favoritesCards.className = "favorites-cards";
+    favoritesCards.className = "movie-list";
     favoritesSection.appendChild(favoritesCards);
 
     renderMovies(favoritesCards, favoriteMovies, userFavoriteIds, async (movieId) => {
