@@ -11,9 +11,10 @@ import { showSpinner } from "./utils/spinner.js";
 import { showToast } from "./utils/toastify.js";
 
 const routes = {
-  "/": Home,
+  "/": Login, // Cambiado: ahora '/' muestra Login
   "/login": Login,
   "/signup": Signup,
+  "/home": Home, // Añadido: ahora '/home' es una ruta explícita
   "/user/:id": Profile,
   "/movie/:id": MovieDetail,
 };
@@ -29,22 +30,26 @@ export async function router() {
   const container = document.getElementById("app");
   container.innerHTML = "";
 
-  if ((path === "/login" || path === "/signup") && currentUser) {
-    navigate("/");
+  // Si la ruta es '/' y el usuario está logueado, ir a Home
+  if (path === "/" && currentUser) {
+    navigate("/home");
     return;
   }
 
-  // Rutas estáticas
+  // Si la ruta es '/' y el usuario NO está logueado, mostrar Login
   if (path === "/") {
+    Login(container);
+    return;
+  }
+
+  // Ruta Home (solo para usuarios logueados)
+  if (path === "/home") {
     if (!currentUser) {
       navigate("/login");
       showToast("You must be logged in to access this page.", "error");
       return;
     }
-
-    // Mostrar spinner inmediatamente
     showSpinner(container, "Loading...");
-
     try {
       const favoriteIds = await getUserFavorites(currentUser.id);
       Home(container, favoriteIds, (movieId) =>
@@ -54,6 +59,7 @@ export async function router() {
       console.error("Error loading favorites:", error);
       Home(container, [], (movieId) => onToggleFavorite(movieId, container));
     }
+    return;
   }
 
   // Ruta login
