@@ -20,14 +20,14 @@ export function Signup(container) {
          <label for="registerFormIsland" class="sign-up-text-label">(*)Island of residence</label>
          <select name="registerFormIsland" id="registerFormIsland"  class= "signup-input">
             <option value="" disabled selected>Select your island</option>
-            <option value="Tfe" >Tenerife</option>
-            <option value="LPa">La Palma</option>
-            <option value="Gom">La Gomera</option>
-            <option value="Hrr">El Hierro</option>
-            <option value="GranC">Gran Canaria</option>
-            <option value="Fvra">Fuerteventura</option>
-            <option value="Lzte">Lanzarote</option>
-            <option value="LGra">La Graciosa</option>
+            <option value="Tfe" class="option-signup" >Tenerife</option>
+            <option value="LPa" class="option-signup">La Palma</option>
+            <option value="Gom" class="option-signup">La Gomera</option>
+            <option value="Hrr" class="option-signup">El Hierro</option>
+            <option value="GranC" class="option-signup">Gran Canaria</option>
+            <option value="Fvra" class="option-signup">Fuerteventura</option>
+            <option value="Lzte" class="option-signup">Lanzarote</option>
+            <option value="LGra" class="option-signup">La Graciosa</option>
          </select>
          <small class="small-sign-up">(*)All fields are required.</small>
          <button type="submit" class= "button-large button-outline">SIGN UP</button>

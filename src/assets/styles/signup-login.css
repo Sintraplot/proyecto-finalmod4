@@ -112,6 +112,10 @@
       color: var(--text-secondary-color);
       font-family:var(--body-font-family)
     }
+    .option-signup{
+      background-color: var(--gray-color);
+      color: var(--text-color);
+    }
     .small-sign-up {
       display:block;
       align-self: flex-start;
