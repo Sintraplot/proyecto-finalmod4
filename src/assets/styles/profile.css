@@ -120,14 +120,6 @@
   margin-bottom: 1rem;
 }
 
-.favorites-cards {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 2rem;
-  align-items: stretch;
-}
-
 @media (min-width: 640px) {
   .profile-container {
     width: 100%;
@@ -284,12 +276,5 @@
     font-weight: 700;
     text-transform: uppercase;
     margin-bottom: 3rem;
-  }
-
-  .favorites-cards {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 2rem;
   }
 }
