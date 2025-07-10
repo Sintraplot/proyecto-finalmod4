@@ -55,8 +55,8 @@
   position: absolute;
   top: 1rem;
   right: 1rem;
-  background-color: var(--white-color);
-  border: none;
+  background-color: var(--background-color);  
+  border: 2px solid var(--gray-color);
   border-radius: 50%;
   width: 40px;
   height: 40px;
@@ -70,13 +70,13 @@
 }
 
 .fav-btn:hover {
-  background-color: var(--primary-color);
+  background-color: var(--background-color);
 }
 
 .movie-info h1 {
   font-size: 2rem;
   font-weight: bold;
-  color: var(--text-color);
+  color: var(--primary-color);
   margin-bottom: 0.5rem;
 }
 
@@ -130,8 +130,8 @@
   padding: 0.25rem 0.75rem;
   border-radius: var(--border-radius);
   font-size: 0.9rem;
-  cursor: pointer;
-  transition: background-color 0.2s, color 0.2s;
+ 
+  /*transition: background-color 0.2s, color 0.2s;*/
 }
 
 .genre-tag:hover {
